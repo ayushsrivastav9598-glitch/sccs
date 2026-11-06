@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCCS - Project Documentation & Architectural Report | DDUGU</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+    :root {
+      --primary: #111827;
+      --secondary: #374151;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --bg: #ffffff;
+      --bg-subtle: #f9fafb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--primary);
+      background: #f3f4f6;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .page-container {
+      max-width: 960px;
+      margin: 2rem auto;
+      background: var(--bg);
+      padding: 3.5rem 4rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Print styling */
+    @media print {
+      body {
+        background: #fff;
+      }
+      .page-container {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        max-width: 100%;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    /* Action bar */
+    .action-bar {
+      position: sticky;
+      top: 0;
+      background: #111827;
+      color: #fff;
+      padding: 0.75rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 4px;
+      text-decoration: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+
+    .btn-light {
+      background: #ffffff;
+      color: #111827;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #ffffff;
+      border-color: #4b5563;
+    }
+
+    /* Cover / Header */
+    .report-header {
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .uni-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: var(--primary);
+      color: #fff;
+      padding: 0.25rem 0.65rem;
+      border-radius: 3px;
+      margin-bottom: 0.75rem;
+    }
+
+    h1.report-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .report-subtitle {
+      font-size: 1.15rem;
+      color: var(--secondary);
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+
+    .meta-item strong {
+      display: block;
+      color: var(--muted);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+
+    /* Typography */
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--primary);
+      border-bottom: 1.5px solid var(--primary);
+      padding-bottom: 0.4rem;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: #374151;
+      line-height: 1.7;
+    }
+
+    ul, ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+      color: #374151;
+      line-height: 1.6;
+    }
+
+    li {
+      margin-bottom: 0.35rem;
+    }
+
+    /* Callout Box */
+    .callout {
+      background: var(--bg-subtle);
+      border-left: 3.5px solid var(--primary);
+      padding: 1rem 1.25rem;
+      border-radius: 0 4px 4px 0;
+      margin: 1.25rem 0;
+      font-size: 0.9rem;
+    }
+
+    .callout strong {
+      color: var(--primary);
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      margin: 1.25rem 0;
+      border: 1px solid var(--border);
+    }
+
+    th, td {
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+
+    th {
+      background: #f3f4f6;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    tr:nth-child(even) td {
+      background: #fafafa;
+    }
+
+    /* Code & Formulas */
+    pre, code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    code {
+      background: #f3f4f6;
+      padding: 0.15rem 0.35rem;
+      border-radius: 3px;
+      font-size: 0.82rem;
+      color: #111827;
+      border: 1px solid #e5e7eb;
+    }
+
+    .formula-box {
+      background: #ffffff;
+      border: 1.5px solid #111827;
+      padding: 1rem 1.25rem;
+      border-radius: 4px;
+      margin: 1rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      background: #111827;
+      color: #ffffff;
+    }
+
+    .badge-success {
+      background: #047857;
+      color: #ffffff;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .card-box {
+      border: 1px solid var(--border);
+      padding: 1rem;
+      border-radius: 4px;
+      background: #ffffff;
+    }
+
+    .card-box h4 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Action Bar (hidden in print) -->
+  <div class="action-bar no-print">
+    <div style="font-size:0.85rem; font-weight:600;">
+      🏛️ SCCS Official Architectural Report & Project Documentation
+    </div>
+    <div style="display:flex; gap:0.5rem;">
+      <button class="btn btn-light" onclick="window.print()">🖨️ Print / Save as PDF</button>
+      <a href="http://localhost:8000" class="btn btn-outline" target="_blank">🌐 Live Web UI</a>
+      <a href="http://localhost:8000/docs" class="btn btn-outline" target="_blank">⚡ Swagger API</a>
+    </div>
+  </div>
+
+  <div class="page-container">
+
+    <!-- Document Header -->
+    <header class="report-header">
+      <span class="uni-badge">Deen Dayal Upadhyaya Gorakhpur University (DDUGU)</span>
+      <h1 class="report-title">Smart Campus Classroom Management System (SCCS)</h1>
+      <div class="report-subtitle">
+        Centralized Scheduling, Conflict Prevention, and Digital Twin Architecture for IET & Deeksha Bhawan
+      </div>
+      <div class="meta-grid">
+        <div class="meta-item">
+          <strong>Institution</strong>
+          DDUGU IET & Deeksha Bhawan
+        </div>
+        <div class="meta-item">
+          <strong>Event / Track</strong>
+          Build With AI: DevOps 2026
+        </div>
+        <div class="meta-item">
+          <strong>Verification</strong>
+          11/11 Test Suites Passing (100%)
+        </div>
+        <div class="meta-item">
+          <strong>Repository</strong>
+          GitHub (ayushsrivastav9598-glitch/sccs)
+        </div>
+      </div>
+    </header>
+
+    <!-- Section 1 -->
+    <section>
+      <h2>1. Executive Summary & Problem Context</h2>
+      <p>
+        Academic coordination across higher education institutions often suffers from fragmented room booking processes, lack of real-time vacancy visibility, and disconnected notification mechanisms. At <strong>Deen Dayal Upadhyaya Gorakhpur University (DDUGU)</strong>, the <strong>Institute of Engineering & Technology (IET)</strong> and nearby <strong>Deeksha Bhawan</strong> (~100 metres walking distance) accommodate six engineering disciplines across four academic years.
+      </p>
+
+      <div class="callout">
+        <strong>The Critical Incident Solved:</strong>
+        During the <em>NSS Minor Examination</em>, multiple faculty members simultaneously reserved Room G-01 and LH-04 via uncoordinated paper notices and informal WhatsApp messages. Students arrived to find two concurrent examinations scheduled in the same hall. This forced an emergency relocation across the 100-meter corridor between IET and Deeksha Bhawan, causing severe delay, confusion, and missed examination sessions.
+      </div>
+
+      <p>
+        The <strong>Smart Campus Classroom Management System (SCCS)</strong> resolves these institutional bottlenecks through:
+      </p>
+      <ul>
+        <li><strong>Mathematical Interval Overlap Engine:</strong> Blocks concurrent reservations at the database level with HTTP 409 Conflict.</li>
+        <li><strong>Distance-Aware Heuristic Suggester:</strong> Automatically recommends alternative rooms across IET and Deeksha Bhawan, penalizing Deeksha Bhawan by 15 points due to the 100m walk.</li>
+        <li><strong>Synchronized Digital Twin:</strong> Live 2D spatial vacancy blueprints for all three floors of IET and 14 lecture halls of Deeksha Bhawan.</li>
+        <li><strong>Academic Timetable Discovery:</strong> Filterable schedules by branch and year with instant CSV spreadsheet download.</li>
+        <li><strong>Student Grievance & Clash Reporting Flow:</strong> Direct channel for students to report collisions, with administrative resolution notes.</li>
+        <li><strong>Immutable Security Audit Trail:</strong> Chronological mutation log tracking every booking, rescheduling, and notice publication.</li>
+      </ul>
+    </section>
+
+    <!-- Section 2 -->
+    <section>
+      <h2>2. Campus Infrastructure Blueprint & Digital Twin</h2>
+      <p>
+        The campus dataset encompasses 34 instructional spaces serving 6 engineering branches over 4 academic years (1st through 4th Year):
+        <strong>CSE</strong> (150 students across Sections A & B), <strong>AI ML</strong> (150 students across Sections A & B), <strong>AI DS</strong> (75 students), <strong>ECE</strong> (75 students), <strong>ME</strong> (75 students), and <strong>IT</strong> (75 students).
+      </p>
+
+      <div class="grid-2">
+        <div class="card-box">
+          <h4>🏢 IET Main Building (20 Spaces)</h4>
+          <p style="font-size:0.8rem; margin:0;">
+            &bull; <strong>Ground Floor:</strong> Central Library & Reading Hall (Cap: 180), Teachers' Office, Director's Boardroom, Admin Cell, Placement Office.<br/>
+            &bull; <strong>1st Floor:</strong> CSE Lab (IET16), ME Lab (IET22), ECE Lab (IET14), IT Lab (IET15), Classrooms IET 17, 18, 19, 20 (Cap: 75 each).<br/>
+            &bull; <strong>2nd Floor:</strong> Seminar Hall IET 32 (Cap: 200), Classrooms IET 23, 24, 25, 28, 29, 30 (Cap: 75 each).
+          </p>
+        </div>
+        <div class="card-box">
+          <h4>🏛️ Deeksha Bhawan (~100m Distance, 14 Halls)</h4>
+          <p style="font-size:0.8rem; margin:0;">
+            &bull; <strong>Ground Floor:</strong> Lecture Halls LH01 through LH07 (Capacities 80–90 each). Equipped with tiered stepped seating and audio-visual setups for minor exams.<br/>
+            &bull; <strong>1st Floor:</strong> Lecture Halls LH08 through LH14 (Capacities 80–90 each). Equipped with high-capacity tiered seating for large lectures and examinations.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section>
+      <h2>3. Algorithmic Formulations</h2>
+
+      <h3>A. Temporal Interval Overlap Detection</h3>
+      <p>
+        Given an existing reservation interval $[S_1, E_1)$ and a requested booking interval $[S_2, E_2)$ on date $D$:
+      </p>
+      <div class="formula-box">
+        Conflict = (S1 &lt; E2) AND (S2 &lt; E1) &hArr; max(S1, S2) &lt; min(E1, E2)
+      </div>
+      <p>
+        Here, $S$ and $E$ represent minutes from midnight ($00:00 = 0, 23:59 = 1439$). If this condition evaluates to true for any non-cancelled booking in the room, the atomic reservation is rejected immediately and the heuristic recommendation pipeline is triggered.
+      </p>
+
+      <h3>B. Distance-Aware Alternative Venue Heuristic Fit-Scoring</h3>
+      <p>
+        When an overlap or capacity overflow occurs, candidate vacant rooms $r$ are dynamically ranked using:
+      </p>
+      <div class="formula-box">
+        Fit Score(r) = max(0, 100 - C_pen - D_pen + B_floor + B_smart)<br/><br/>
+        Where:<br/>
+        &bull; C_pen = min(30.0, 0.4 &times; |Capacity(r) - Expected_Students|)<br/>
+        &bull; D_pen = 15 points if room is in Deeksha Bhawan (~100m walking distance)<br/>
+        &bull; B_floor = +10 points if room is on the same floor as requested<br/>
+        &bull; B_smart = +15 points if projector &amp; smart audio match requested criteria
+      </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section>
+      <h2>4. Role-Based Access Control (RBAC) Matrix</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>System Operation / Capability</th>
+            <th>Student</th>
+            <th>Faculty</th>
+            <th>System Administrator</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>View Live 2D Floor Blueprints & Vacancy</strong></td>
+            <td style="color:#047857;">✓ Allowed</td>
+            <td style="color:#047857;">✓ Allowed</td>
+            <td style="color:#047857;">✓ Allowed</td>
+          </tr>
+          <tr>
+            <td><strong>Search Timetable & Download CSV Schedule</strong></td>
+            <td style="color:#047857;">✓ Allowed</td>
+            <td style="color:#047857;">✓ Allowed</td>
+            <td style="color:#047857;">✓ Allowed</td>
+          </tr>
+          <tr>
+            <td><strong>Read Announcements & NSS Minor Exam Notices</strong></td>
+            <td style="color:#047857;">✓ Allowed</td>
+            <td style="color:#047857;">✓ Allowed</td>
+            <td style="color:#047857;">✓ Allowed</td>
+          </tr>
+          <tr>
+            <td><strong>File Classroom Conflict / Equipment Grievance</strong></td>
+            <td style="color:#047857;">✓ Allowed</td>
+            <td style="color:#047857;">✓ Allowed</td>
+            <td style="color:#047857;">✓ Allowed</td>
+          </tr>
+          <tr>
+            <td><strong>Reserve Rooms & Classrooms</strong></td>
+            <td style="color:#b91c1c;">✕ Blocked</td>
+            <td style="color:#047857;">✓ Allowed</td>
+            <td style="color:#047857;">✓ Allowed</td>
+          </tr>
+          <tr>
+            <td><strong>Cancel or Reschedule Bookings</strong></td>
+            <td style="color:#b91c1c;">✕ Blocked</td>
+            <td style="color:#047857;">✓ Own Bookings Only</td>
+            <td style="color:#047857;">✓ Any Reservation</td>
+          </tr>
+          <tr>
+            <td><strong>Broadcast Urgent Examination Notices</strong></td>
+            <td style="color:#b91c1c;">✕ Blocked</td>
+            <td style="color:#047857;">✓ Allowed</td>
+            <td style="color:#047857;">✓ Allowed</td>
+          </tr>
+          <tr>
+            <td><strong>Resolve Student Conflict Reports with Notes</strong></td>
+            <td style="color:#b91c1c;">✕ Blocked</td>
+            <td style="color:#047857;">✓ Allowed</td>
+            <td style="color:#047857;">✓ Allowed</td>
+          </tr>
+          <tr>
+            <td><strong>Inspect Chronological Immutable Audit Trail</strong></td>
+            <td style="color:#b91c1c;">✕ Blocked</td>
+            <td style="color:#047857;">✓ Allowed</td>
+            <td style="color:#047857;">✓ Allowed</td>
+          </tr>
+          <tr>
+            <td><strong>Campus-Wide Capacity & Venue Overrides</strong></td>
+            <td style="color:#b91c1c;">✕ Blocked</td>
+            <td style="color:#b91c1c;">✕ Blocked</td>
+            <td style="color:#047857;">✓ Allowed</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 5 -->
+    <section>
+      <h2>5. Complete REST API Specifications (OpenAPI 3.1.0)</h2>
+      <p>
+        The backend exposes 26 endpoints grouped across 10 functional OpenAPI tags, accessible interactively via Swagger UI (<code>/docs</code>) and ReDoc (<code>/redoc</code>):
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Endpoint Route</th>
+            <th>Module Tag</th>
+            <th>Access Level</th>
+            <th>Functional Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge">POST</span></td>
+            <td><code>/auth/register</code></td>
+            <td>Authentication</td>
+            <td>Public</td>
+            <td>Register new user with role, branch, year, section.</td>
+          </tr>
+          <tr>
+            <td><span class="badge">POST</span></td>
+            <td><code>/auth/login</code></td>
+            <td>Authentication</td>
+            <td>Public</td>
+            <td>Authenticate email and password; return Bearer token.</td>
+          </tr>
+          <tr>
+            <td><span class="badge">GET</span></td>
+            <td><code>/rooms/blueprints</code></td>
+            <td>Rooms &amp; Blueprints</td>
+            <td>Public</td>
+            <td>Live 2D spatial vacancy representation for IET &amp; Deeksha Bhawan.</td>
+          </tr>
+          <tr>
+            <td><span class="badge">POST</span></td>
+            <td><code>/rooms/availability</code></td>
+            <td>Rooms &amp; Blueprints</td>
+            <td>Public</td>
+            <td>Multi-criteria vacancy search with heuristic alternatives.</td>
+          </tr>
+          <tr>
+            <td><span class="badge">POST</span></td>
+            <td><code>/bookings</code></td>
+            <td>Faculty Booking</td>
+            <td>Faculty / Admin</td>
+            <td>Atomic reservation with interval overlap conflict blocker.</td>
+          </tr>
+          <tr>
+            <td><span class="badge">DELETE</span></td>
+            <td><code>/bookings/{id}</code></td>
+            <td>Faculty Booking</td>
+            <td>Faculty (Own) / Admin</td>
+            <td>Cancel reservation and log audit trail entry.</td>
+          </tr>
+          <tr>
+            <td><span class="badge">GET</span></td>
+            <td><code>/schedules/timetable</code></td>
+            <td>Academic Schedules</td>
+            <td>Public</td>
+            <td>Academic schedule filtered by branch, year, section.</td>
+          </tr>
+          <tr>
+            <td><span class="badge">GET</span></td>
+            <td><code>/schedules/export</code></td>
+            <td>Academic Schedules</td>
+            <td>Public</td>
+            <td>Download CSV spreadsheet of academic timetable.</td>
+          </tr>
+          <tr>
+            <td><span class="badge">POST</span></td>
+            <td><code>/notices</code></td>
+            <td>Academic Notices</td>
+            <td>Faculty / Admin</td>
+            <td>Broadcast urgent minor examination notices and room updates.</td>
+          </tr>
+          <tr>
+            <td><span class="badge">POST</span></td>
+            <td><code>/reports</code></td>
+            <td>Student Grievance</td>
+            <td>Student+</td>
+            <td>Submit classroom conflict, locked door, or facility report.</td>
+          </tr>
+          <tr>
+            <td><span class="badge">PUT</span></td>
+            <td><code>/reports/{id}/resolve</code></td>
+            <td>Student Grievance</td>
+            <td>Faculty / Admin</td>
+            <td>Mark grievance resolved with explanatory staff notes.</td>
+          </tr>
+          <tr>
+            <td><span class="badge">GET</span></td>
+            <td><code>/audit</code></td>
+            <td>Accountability</td>
+            <td>Faculty / Admin</td>
+            <td>Chronological immutable audit ledger of all mutations.</td>
+          </tr>
+          <tr>
+            <td><span class="badge">POST</span></td>
+            <td><code>/ai/assist</code></td>
+            <td>Intelligent Assistant</td>
+            <td>Public</td>
+            <td>Natural language heuristic campus vacancy query assistant.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 6 -->
+    <section>
+      <h2>6. Verification & Automated Test Evidence</h2>
+      <p>
+        The entire operational workflow is validated by 11 automated test suites in <code>tests/test_api.py</code>, achieving a <strong>100% pass rate</strong>:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Suite #</th>
+            <th>Test Function</th>
+            <th>Requirement Verified</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>01</td>
+            <td><code>test_01_health_and_seed_data</code></td>
+            <td>Database initialization, IET &amp; Deeksha Bhawan room records</td>
+            <td><span class="badge badge-success">PASSED</span></td>
+          </tr>
+          <tr>
+            <td>02</td>
+            <td><code>test_02_student_legacy_compatibility</code></td>
+            <td>Backwards compatibility for legacy student endpoints</td>
+            <td><span class="badge badge-success">PASSED</span></td>
+          </tr>
+          <tr>
+            <td>03</td>
+            <td><code>test_03_modular_auth_flow</code></td>
+            <td>PBKDF2 password hashing, bearer token generation, RBAC</td>
+            <td><span class="badge badge-success">PASSED</span></td>
+          </tr>
+          <tr>
+            <td>04</td>
+            <td><code>test_04_room_listing_and_blueprints</code></td>
+            <td>2D spatial vacancy queries for IET and Deeksha Bhawan</td>
+            <td><span class="badge badge-success">PASSED</span></td>
+          </tr>
+          <tr>
+            <td>05</td>
+            <td><code>test_05_booking_and_conflict_prevention</code></td>
+            <td>Interval overlap collision detection and HTTP 409 Conflict</td>
+            <td><span class="badge badge-success">PASSED</span></td>
+          </tr>
+          <tr>
+            <td>06</td>
+            <td><code>test_06_smart_alternative_recommendations</code></td>
+            <td>Distance penalty (-15 pts) and heuristic fit scoring</td>
+            <td><span class="badge badge-success">PASSED</span></td>
+          </tr>
+          <tr>
+            <td>07</td>
+            <td><code>test_07_academic_schedules_and_csv_export</code></td>
+            <td>Multi-branch timetable filtering and CSV file generation</td>
+            <td><span class="badge badge-success">PASSED</span></td>
+          </tr>
+          <tr>
+            <td>08</td>
+            <td><code>test_08_notices_and_announcements</code></td>
+            <td>Urgent NSS minor examination notice broadcasting</td>
+            <td><span class="badge badge-success">PASSED</span></td>
+          </tr>
+          <tr>
+            <td>09</td>
+            <td><code>test_09_student_conflict_reporting_workflow</code></td>
+            <td>Student grievance submission and staff resolution with notes</td>
+            <td><span class="badge badge-success">PASSED</span></td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td><code>test_10_immutable_audit_trail</code></td>
+            <td>Chronological security ledger of bookings and cancellations</td>
+            <td><span class="badge badge-success">PASSED</span></td>
+          </tr>
+          <tr>
+            <td>11</td>
+            <td><code>test_11_ai_scheduling_assistant</code></td>
+            <td>Natural language entity parsing and automated room recommendation</td>
+            <td><span class="badge badge-success">PASSED</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 7 -->
+    <section>
+      <h2>7. DevOps, CI/CD Pipeline & Cloud Deployment</h2>
+      <div class="grid-2">
+        <div class="card-box">
+          <h4>🐳 Containerization & CI/CD</h4>
+          <p style="font-size:0.8rem;">
+            &bull; <strong>Docker:</strong> Production multi-stage Dockerfile running non-root security user with automated healthcheck.<br/>
+            &bull; <strong>GitHub Actions:</strong> Automated test execution and container build verification on push to <code>main</code>.<br/>
+            &bull; <strong>Docker Compose:</strong> Single command deployment: <code>docker-compose up --build -d</code>.
+          </p>
+        </div>
+        <div class="card-box">
+          <h4>☁️ Cloud Deployment (Render.com)</h4>
+          <p style="font-size:0.8rem;">
+            &bull; Configured natively via <code>render.yaml</code>.<br/>
+            &bull; <strong>Runtime:</strong> Python 3.11.9.<br/>
+            &bull; <strong>Build Command:</strong> <code>pip install -r requirements.txt</code>.<br/>
+            &bull; <strong>Start Command:</strong> <code>uvicorn main:app --host 0.0.0.0 --port $PORT</code>.<br/>
+            &bull; Persistent SQLite storage for campus database.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 8 -->
+    <section style="margin-top:2.5rem; padding-top:1.5rem; border-top:1px solid var(--border); font-size:0.8rem; color:var(--muted); text-align:center;">
+      <p>
+        <strong>Smart Campus Classroom Management System (SCCS)</strong> &bull; Deen Dayal Upadhyaya Gorakhpur University (DDUGU)<br/>
+        Institute of Engineering and Technology (IET) &bull; Deeksha Bhawan<br/>
+        GitHub: <a href="https://github.com/ayushsrivastav9598-glitch/sccs.git" style="color:#111827;">https://github.com/ayushsrivastav9598-glitch/sccs.git</a>
+      </p>
+    </section>
+
+  </div>
+</body>
+</html>
