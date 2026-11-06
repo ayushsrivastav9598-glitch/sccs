@@ -47,20 +47,32 @@
     </div>
   </div>
 
-  <!-- Navigation Tabs -->
-  <nav class="nav-tabs">
-    <div class="nav-tab active" data-tab="tab-blueprints">Campus Blueprints</div>
-    <div class="nav-tab" data-tab="tab-booking">Room Discovery & Booking</div>
-    <div class="nav-tab" data-tab="tab-timetable">Academic Timetable</div>
-    <div class="nav-tab" data-tab="tab-notices">Announcements & Exams</div>
-    <div class="nav-tab" data-tab="tab-reports">Conflict & Issue Reports</div>
-    <div class="nav-tab" data-tab="tab-ai">AI Campus Assistant</div>
-    <div class="nav-tab" data-tab="tab-audit">Audit Log & History</div>
-    <div class="nav-tab" data-tab="tab-roles">Roles & Permissions</div>
-  </nav>
+  <!-- App Layout with Left Sidebar -->
+  <div class="app-layout">
+    <!-- Left Navigation Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-heading">CAMPUS MODULES</div>
+      <nav class="nav-tabs">
+        <div class="nav-tab active" data-tab="tab-blueprints">Campus Blueprints</div>
+        <div class="nav-tab" data-tab="tab-booking">Room Discovery & Booking</div>
+        <div class="nav-tab" data-tab="tab-timetable">Academic Timetable</div>
+        <div class="nav-tab" data-tab="tab-notices">Announcements & Exams</div>
+        <div class="nav-tab" data-tab="tab-reports">Conflict & Issue Reports</div>
+        <div class="nav-tab" data-tab="tab-ai">AI Campus Assistant</div>
+        <div class="nav-tab" data-tab="tab-audit">Audit Log & History</div>
+        <div class="nav-tab" data-tab="tab-roles">Roles & Permissions</div>
+      </nav>
+      <div class="sidebar-footer">
+        <div style="font-size:0.75rem; color:#6b7280; line-height:1.4;">
+          <strong>DDU Gorakhpur University</strong><br/>
+          IET &bull; Deeksha Bhawan
+        </div>
+      </div>
+    </aside>
 
-  <!-- Main Container -->
-  <main class="container">
+    <!-- Main Content on the Right -->
+    <main class="main-content">
+      <div class="container">
 
     <!-- ==================== TAB 1: BLUEPRINTS ==================== -->
     <div id="tab-blueprints" class="tab-pane active">
@@ -754,7 +766,9 @@
       </div>
     </div>
 
-  </main>
+      </div>
+    </main>
+  </div>
 
   <!-- Room Details & Schedule Modal -->
   <div id="room-modal" class="modal">
