@@ -35,6 +35,18 @@
     </div>
   </header>
 
+  <!-- Active Role & Permissions Context Bar -->
+  <div id="role-context-bar" style="background:#f3f4f6; border-bottom:1px solid #e5e7eb; padding:0.45rem 2rem; font-size:0.8rem; color:#374151;">
+    <div style="max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+      <div id="role-context-text">
+        <strong>Active Role: Faculty</strong> &bull; Can search vacant rooms, create reservations, publish exam notices, and resolve student conflict reports.
+      </div>
+      <button class="btn btn-sm btn-secondary" onclick="openRolesModal()" style="padding:0.2rem 0.55rem; font-size:0.75rem;">
+        📋 Roles & Permissions Guide
+      </button>
+    </div>
+  </div>
+
   <!-- Navigation Tabs -->
   <nav class="nav-tabs">
     <div class="nav-tab active" data-tab="tab-blueprints">Campus Blueprints</div>
@@ -44,6 +56,7 @@
     <div class="nav-tab" data-tab="tab-reports">Conflict & Issue Reports</div>
     <div class="nav-tab" data-tab="tab-ai">AI Campus Assistant</div>
     <div class="nav-tab" data-tab="tab-audit">Audit Log & History</div>
+    <div class="nav-tab" data-tab="tab-roles">Roles & Permissions</div>
   </nav>
 
   <!-- Main Container -->
@@ -549,6 +562,198 @@
       </div>
     </div>
 
+    <!-- ==================== TAB 8: ROLES & PERMISSIONS MATRIX ==================== -->
+    <div id="tab-roles" class="tab-pane">
+      <div style="margin-bottom:1.25rem;">
+        <h3 style="font-size:1.1rem; font-weight:700; color:#111827;">Role-Based Access Control (RBAC) & Governance Matrix</h3>
+        <p style="font-size:0.85rem; color:#4b5563; margin-top:0.25rem;">
+          Detailed breakdown of what each user role (Student, Faculty, System Administrator) can and cannot do across DDUGU IET & Deeksha Bhawan.
+        </p>
+      </div>
+
+      <!-- 3 Roles Persona Cards -->
+      <div class="grid-3" style="margin-bottom:1.5rem;">
+        
+        <!-- Student Card -->
+        <div class="card" style="border-top:3px solid #4b5563;">
+          <div class="card-header" style="margin-bottom:0.75rem;">
+            <div>
+              <span class="role-pill role-student" style="font-size:0.65rem;">STUDENT ROLE</span>
+              <h4 style="font-size:1rem; font-weight:700; color:#111827; margin-top:0.25rem;">🎓 Student Persona</h4>
+            </div>
+            <button class="btn btn-sm btn-secondary" onclick="loginAs('student')">Activate</button>
+          </div>
+          <div style="font-size:0.8rem; color:#374151;">
+            <div style="font-weight:600; color:#111827; margin-bottom:0.35rem;">What Students CAN do:</div>
+            <ul style="padding-left:1.2rem; margin-bottom:0.75rem; line-height:1.5;">
+              <li>View live 2D floor plans & room occupancy states.</li>
+              <li>View branch timetable (CSE, AI ML, ECE, ME, IT).</li>
+              <li>Download timetable in CSV / JSON format.</li>
+              <li>Read urgent minor examination & room notices.</li>
+              <li>File conflict / grievance reports on schedule clashes.</li>
+              <li>Ask AI Assistant for schedule & vacancy queries.</li>
+            </ul>
+            <div style="font-weight:600; color:#b91c1c; margin-bottom:0.35rem;">Restrictions (Safety Boundary):</div>
+            <ul style="padding-left:1.2rem; color:#6b7280; line-height:1.4;">
+              <li>Cannot book or reserve rooms.</li>
+              <li>Cannot reschedule or cancel official bookings.</li>
+              <li>Cannot alter official bulletins or audit logs.</li>
+            </ul>
+            <div style="margin-top:0.75rem; padding-top:0.5rem; border-top:1px solid #f3f4f6; font-size:0.75rem; color:#6b7280;">
+              Demo Account: <code>student.cse@ddugu.ac.in</code> / <code>student123</code>
+            </div>
+          </div>
+        </div>
+
+        <!-- Faculty Card -->
+        <div class="card" style="border-top:3px solid #111827;">
+          <div class="card-header" style="margin-bottom:0.75rem;">
+            <div>
+              <span class="role-pill role-faculty" style="font-size:0.65rem;">FACULTY ROLE</span>
+              <h4 style="font-size:1rem; font-weight:700; color:#111827; margin-top:0.25rem;">👨‍🏫 Faculty Persona</h4>
+            </div>
+            <button class="btn btn-sm btn-primary" onclick="loginAs('faculty')">Activate</button>
+          </div>
+          <div style="font-size:0.8rem; color:#374151;">
+            <div style="font-weight:600; color:#111827; margin-bottom:0.35rem;">What Faculty CAN do:</div>
+            <ul style="padding-left:1.2rem; margin-bottom:0.75rem; line-height:1.5;">
+              <li>Search vacancy with capacity & equipment filters.</li>
+              <li>Book rooms for Extra Classes, Minor Exams, Labs & Seminars.</li>
+              <li>Automatic Conflict Blocker & Smart Alternative Suggestions.</li>
+              <li>Reschedule & cancel their OWN reservations.</li>
+              <li>Publish official academic notices & urgent exam alerts.</li>
+              <li>Review & resolve student grievance reports with remarks.</li>
+            </ul>
+            <div style="font-weight:600; color:#b91c1c; margin-bottom:0.35rem;">Restrictions (Departmental Integrity):</div>
+            <ul style="padding-left:1.2rem; color:#6b7280; line-height:1.4;">
+              <li>Cannot cancel or reschedule another faculty's booking.</li>
+              <li>Cannot delete immutable system audit logs.</li>
+            </ul>
+            <div style="margin-top:0.75rem; padding-top:0.5rem; border-top:1px solid #f3f4f6; font-size:0.75rem; color:#6b7280;">
+              Demo Account: <code>prof.sharma@ddugu.ac.in</code> / <code>faculty123</code>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Administrator Card -->
+        <div class="card" style="border-top:3px solid #000000;">
+          <div class="card-header" style="margin-bottom:0.75rem;">
+            <div>
+              <span class="role-pill role-admin" style="font-size:0.65rem;">SYSTEM ADMIN</span>
+              <h4 style="font-size:1rem; font-weight:700; color:#111827; margin-top:0.25rem;">🛡️ Administrator Persona</h4>
+            </div>
+            <button class="btn btn-sm btn-secondary" onclick="loginAs('admin')">Activate</button>
+          </div>
+          <div style="font-size:0.8rem; color:#374151;">
+            <div style="font-weight:600; color:#111827; margin-bottom:0.35rem;">What System Admins CAN do:</div>
+            <ul style="padding-left:1.2rem; margin-bottom:0.75rem; line-height:1.5;">
+              <li>Campus-wide override: cancel/reschedule ANY booking.</li>
+              <li>Access full chronological immutable Audit Trail.</li>
+              <li>Manage room capacities, permitted uses, & facilities.</li>
+              <li>Moderate, publish, and delete official notices.</li>
+              <li>Resolve or dismiss all student conflict reports.</li>
+              <li>Inspect registered users across all branches.</li>
+            </ul>
+            <div style="font-weight:600; color:#111827; margin-bottom:0.35rem;">Governance Responsibility:</div>
+            <ul style="padding-left:1.2rem; color:#6b7280; line-height:1.4;">
+              <li>Maintains campus schedule coordination & resolves disputes.</li>
+            </ul>
+            <div style="margin-top:0.75rem; padding-top:0.5rem; border-top:1px solid #f3f4f6; font-size:0.75rem; color:#6b7280;">
+              Demo Account: <code>admin@ddugu.ac.in</code> / <code>admin123</code>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Comparison Matrix Table -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-header">
+          <h4 class="card-title">Detailed Permissions Matrix</h4>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Operation / Capability</th>
+                <th style="text-align:center; width:120px;">Student</th>
+                <th style="text-align:center; width:120px;">Faculty</th>
+                <th style="text-align:center; width:120px;">Administrator</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>View 2D Campus Blueprints & Live Vacancy</strong></td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+              </tr>
+              <tr>
+                <td><strong>Query Academic Timetable & Export CSV/JSON</strong></td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+              </tr>
+              <tr>
+                <td><strong>Read Examination Bulletins & Room Allocations</strong></td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+              </tr>
+              <tr>
+                <td><strong>Submit Conflict & Grievance Reports</strong></td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+              </tr>
+              <tr>
+                <td><strong>Book Classrooms & Laboratories</strong></td>
+                <td style="text-align:center; color:#b91c1c;">✕ Prohibited</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+              </tr>
+              <tr>
+                <td><strong>Reschedule / Cancel Own Reservations</strong></td>
+                <td style="text-align:center; color:#b91c1c;">✕ Prohibited</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+              </tr>
+              <tr>
+                <td><strong>Override / Cancel ANY Other Professor's Booking</strong></td>
+                <td style="text-align:center; color:#b91c1c;">✕ Prohibited</td>
+                <td style="text-align:center; color:#b91c1c;">✕ Prohibited</td>
+                <td style="text-align:center; color:#047857;">✓ Admin Only</td>
+              </tr>
+              <tr>
+                <td><strong>Publish Campus Bulletins & Exam Notices</strong></td>
+                <td style="text-align:center; color:#b91c1c;">✕ Prohibited</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+              </tr>
+              <tr>
+                <td><strong>Delete Academic Notices</strong></td>
+                <td style="text-align:center; color:#b91c1c;">✕ Prohibited</td>
+                <td style="text-align:center; color:#b91c1c;">✕ Prohibited</td>
+                <td style="text-align:center; color:#047857;">✓ Admin Only</td>
+              </tr>
+              <tr>
+                <td><strong>Resolve Student Grievances with Staff Notes</strong></td>
+                <td style="text-align:center; color:#b91c1c;">✕ Prohibited</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+              </tr>
+              <tr>
+                <td><strong>View Chronological Audit Trail & History</strong></td>
+                <td style="text-align:center; color:#b91c1c;">✕ Prohibited</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+                <td style="text-align:center; color:#047857;">✓ Allowed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </main>
 
   <!-- Room Details & Schedule Modal -->
@@ -589,6 +794,64 @@
       <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
         <button class="btn btn-secondary" onclick="closeRoomModal()">Close</button>
         <button class="btn btn-primary" onclick="quickBookFromModal()">Reserve This Room</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Roles & Permissions Quick Guide Modal -->
+  <div id="roles-modal" class="modal">
+    <div class="modal-content" style="max-width:700px;">
+      <div class="modal-header">
+        <h3 style="font-size:1.05rem; font-weight:700; color:#111827;">📋 Roles & Permissions Guide</h3>
+        <button class="modal-close" onclick="closeRolesModal()">&times;</button>
+      </div>
+      
+      <p style="font-size:0.8rem; color:#4b5563; margin-bottom:1rem;">
+        SCCS uses Role-Based Access Control (RBAC) to ensure security, prevent scheduling overlaps, and avoid examination miscommunication.
+      </p>
+
+      <div style="display:flex; flex-direction:column; gap:0.75rem; margin-bottom:1.25rem;">
+        <!-- Student -->
+        <div style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:4px; padding:0.75rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+            <strong style="font-size:0.85rem; color:#111827;">🎓 Student Role</strong>
+            <button class="btn btn-sm btn-secondary" onclick="loginAs('student'); closeRolesModal();">Switch to Student</button>
+          </div>
+          <div style="font-size:0.75rem; color:#4b5563; line-height:1.4;">
+            <strong>Allowed:</strong> Live 2D vacancy blueprints, branch timetable, download CSV, read exam notices, submit conflict reports.<br/>
+            <strong>Prohibited:</strong> Cannot book, reschedule, or cancel rooms.
+          </div>
+        </div>
+
+        <!-- Faculty -->
+        <div style="background:#ffffff; border:1.5px solid #111827; border-radius:4px; padding:0.75rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+            <strong style="font-size:0.85rem; color:#111827;">👨‍🏫 Faculty Role</strong>
+            <button class="btn btn-sm btn-primary" onclick="loginAs('faculty'); closeRolesModal();">Switch to Faculty</button>
+          </div>
+          <div style="font-size:0.75rem; color:#4b5563; line-height:1.4;">
+            <strong>Allowed:</strong> Search rooms, book extra lectures / minor exams / labs, conflict blocker & alternatives, reschedule/cancel OWN bookings, post notices, resolve student reports.<br/>
+            <strong>Prohibited:</strong> Cannot cancel other faculties' reservations.
+          </div>
+        </div>
+
+        <!-- Admin -->
+        <div style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:4px; padding:0.75rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+            <strong style="font-size:0.85rem; color:#111827;">🛡️ System Administrator</strong>
+            <button class="btn btn-sm btn-secondary" onclick="loginAs('admin'); closeRolesModal();">Switch to Admin</button>
+          </div>
+          <div style="font-size:0.75rem; color:#4b5563; line-height:1.4;">
+            <strong>Allowed:</strong> Campus-wide overrides, override ANY reservation, full audit trail access, manage room capacities, moderate notices, resolve grievances.
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <button class="btn btn-sm btn-secondary" onclick="closeRolesModal(); switchTab('tab-roles');">
+          Open Full Permissions Matrix Tab
+        </button>
+        <button class="btn btn-sm btn-primary" onclick="closeRolesModal()">Close</button>
       </div>
     </div>
   </div>

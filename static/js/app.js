@@ -120,6 +120,18 @@ function updateUserUI() {
         branchEl.textContent = currentUser.branch ? `(${currentUser.branch})` : "";
     }
 
+    // Update Context Bar text
+    const contextText = document.getElementById("role-context-text");
+    if (contextText) {
+        if (currentUser.role === "student") {
+            contextText.innerHTML = `<strong>Active Role: Student (${escapeHtml(currentUser.name)})</strong> &bull; Allowed: View live 2D vacancy blueprints, check branch timetable, export CSV, and file schedule conflict reports. (Booking restricted to faculty).`;
+        } else if (currentUser.role === "faculty") {
+            contextText.innerHTML = `<strong>Active Role: Faculty (${escapeHtml(currentUser.name)})</strong> &bull; Allowed: Search vacancy, book rooms/labs for extra classes or minor exams, receive conflict warnings & alternatives, publish notices, and resolve student reports.`;
+        } else if (currentUser.role === "admin") {
+            contextText.innerHTML = `<strong>Active Role: System Administrator (${escapeHtml(currentUser.name)})</strong> &bull; Allowed: Full campus governance, override/cancel ANY booking, access complete audit trail, manage capacities, and resolve grievances.`;
+        }
+    }
+
     // Role-dependent controls
     const facultySections = document.querySelectorAll(".faculty-only");
     const adminSections = document.querySelectorAll(".admin-only");
@@ -130,6 +142,14 @@ function updateUserUI() {
     adminSections.forEach(el => {
         el.style.display = (currentUser.role === "admin") ? "block" : "none";
     });
+}
+
+function openRolesModal() {
+    document.getElementById("roles-modal")?.classList.add("active");
+}
+
+function closeRolesModal() {
+    document.getElementById("roles-modal")?.classList.remove("active");
 }
 
 function getAuthHeader() {
