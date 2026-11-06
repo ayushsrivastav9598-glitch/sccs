@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  sccs-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ddugu_sccs_app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_PATH=/app/campus.db
+      - SECRET_KEY=ddugu-iet-smart-campus-secret-key-2026
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+    volumes:
+      - ./campus.db:/app/campus.db
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/').read()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
