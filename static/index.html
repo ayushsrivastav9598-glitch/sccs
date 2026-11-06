@@ -61,6 +61,7 @@
         <div class="nav-tab" data-tab="tab-ai">AI Campus Assistant</div>
         <div class="nav-tab" data-tab="tab-audit">Audit Log & History</div>
         <div class="nav-tab" data-tab="tab-roles">Roles & Permissions</div>
+        <div class="nav-tab" data-tab="tab-docs">Docs & Architecture</div>
       </nav>
       <div class="sidebar-footer">
         <div style="font-size:0.75rem; color:#6b7280; line-height:1.4;">
@@ -762,6 +763,312 @@
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 9: SYSTEM DOCS & ARCHITECTURE ==================== -->
+    <div id="tab-docs" class="tab-pane">
+      <!-- Overview Card -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-header" style="border-bottom:1px solid #e5e7eb; padding-bottom:0.75rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+            <div>
+              <h3 class="card-title" style="font-size:1.15rem; font-weight:700;">📖 System Documentation & Architectural Specification</h3>
+              <p style="font-size:0.8rem; color:#4b5563; margin-top:0.2rem;">
+                Smart Campus Classroom Management System (SCCS) &bull; Deen Dayal Upadhyaya Gorakhpur University (DDUGU)
+              </p>
+            </div>
+            <span class="badge" style="background:#111827; color:#ffffff; font-size:0.75rem; padding:0.35rem 0.65rem;">
+              v1.0.0 Production Architecture
+            </span>
+          </div>
+        </div>
+
+        <p style="font-size:0.85rem; color:#374151; line-height:1.6; margin-top:0.75rem;">
+          The SCCS was developed to eliminate scheduling collisions, double-booking incidents, and examination miscommunication across the 
+          <strong>Institute of Engineering & Technology (IET)</strong> (Ground, 1st, 2nd floors) and <strong>Deeksha Bhawan</strong> (~100m walking distance, 14 lecture halls) 
+          serving 6 engineering branches (CSE, AI ML, AI DS, ECE, ME, IT) across 4 academic years.
+        </p>
+      </div>
+
+      <!-- Problem Solved & Real-World Context -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-header">
+          <h3 class="card-title" style="font-size:1rem; font-weight:700;">🎯 The Core Problem & Root-Cause Elimination</h3>
+        </div>
+        <div style="font-size:0.85rem; color:#374151; line-height:1.6;">
+          <div style="background:#f9fafb; border-left:3px solid #111827; padding:0.85rem 1rem; border-radius:0 4px 4px 0; margin-bottom:1rem;">
+            <strong>The Incident Solved:</strong> During the NSS Minor Examination, multiple faculties claimed Room G-01 and LH-04 simultaneously 
+            via uncoordinated paper notices and informal WhatsApp messages. Students arrived to find two concurrent exams scheduled in the same hall, 
+            forcing emergency relocations across the 100-meter corridor between IET and Deeksha Bhawan, causing severe delay and confusion.
+          </div>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1rem;">
+            <div style="border:1px solid #e5e7eb; padding:0.85rem; border-radius:4px;">
+              <strong style="color:#111827; display:block; margin-bottom:0.35rem;">1. Mathematical Overlap Engine</strong>
+              <p style="font-size:0.8rem; color:#4b5563; margin:0;">
+                All reservation attempts run through an automated interval-intersection verification algorithm. Overlaps are blocked with HTTP 409 Conflict at the database level.
+              </p>
+            </div>
+            <div style="border:1px solid #e5e7eb; padding:0.85rem; border-radius:4px;">
+              <strong style="color:#111827; display:block; margin-bottom:0.35rem;">2. Distance-Aware Alternative Recommender</strong>
+              <p style="font-size:0.8rem; color:#4b5563; margin:0;">
+                When a room is occupied, the heuristic scoring algorithm penalizes Deeksha Bhawan by 15 points due to the 100m walking distance, prioritizing vacant rooms on the same floor first.
+              </p>
+            </div>
+            <div style="border:1px solid #e5e7eb; padding:0.85rem; border-radius:4px;">
+              <strong style="color:#111827; display:block; margin-bottom:0.35rem;">3. Synchronized Single Source of Truth</strong>
+              <p style="font-size:0.8rem; color:#4b5563; margin:0;">
+                Live 2D floor blueprints, branch timetables, CSV exports, official notices, and student grievance channels read from a unified, synchronized database with full audit logging.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Algorithmic Specifications -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-header">
+          <h3 class="card-title" style="font-size:1rem; font-weight:700;">⚙️ Algorithmic Engine & Mathematical Formulations</h3>
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:1.25rem; font-size:0.85rem;">
+          <!-- Interval Overlap -->
+          <div style="background:#f9fafb; border:1px solid #e5e7eb; padding:1rem; border-radius:4px;">
+            <h4 style="font-size:0.9rem; font-weight:700; color:#111827; margin-bottom:0.5rem;">A. Temporal Interval Overlap Detection</h4>
+            <p style="color:#4b5563; margin-bottom:0.75rem;">
+              Given an existing booking interval [S₁, E₁) and a requested booking interval [S₂, E₂) on date D:
+            </p>
+            <div style="background:#ffffff; border:1px solid #d1d5db; padding:0.6rem 0.8rem; border-radius:4px; font-family:monospace; font-size:0.8rem; margin-bottom:0.75rem; color:#111827;">
+              Conflict = (S1 &lt; E2) AND (S2 &lt; E1)<br/>
+              Equivalent: max(S1, S2) &lt; min(E1, E2)
+            </div>
+            <p style="font-size:0.78rem; color:#6b7280; line-height:1.4;">
+              If this evaluates to true for any non-cancelled reservation in the target room, the booking is rejected immediately and the heuristic recommendation pipeline is triggered.
+            </p>
+          </div>
+
+          <!-- Fit Scoring Formula -->
+          <div style="background:#f9fafb; border:1px solid #e5e7eb; padding:1rem; border-radius:4px;">
+            <h4 style="font-size:0.9rem; font-weight:700; color:#111827; margin-bottom:0.5rem;">B. Heuristic Alternative Room Fit Scoring</h4>
+            <p style="color:#4b5563; margin-bottom:0.75rem;">
+              Candidate rooms are ranked dynamically using a multi-factor fitness function normalized to [0, 100]:
+            </p>
+            <div style="background:#ffffff; border:1px solid #d1d5db; padding:0.6rem 0.8rem; border-radius:4px; font-family:monospace; font-size:0.78rem; margin-bottom:0.75rem; color:#111827;">
+              Fit Score = max(0, 100 - C_pen - D_pen + B_floor + B_smart)<br/><br/>
+              &bull; C_pen = (Room_Capacity - Students_Needed) &times; 1.5<br/>
+              &bull; D_pen = 15 pts if Deeksha Bhawan (~100m away)<br/>
+              &bull; B_floor = +10 pts if same floor as requested<br/>
+              &bull; B_smart = +15 pts if projector &amp; smartboard matched
+            </div>
+            <p style="font-size:0.78rem; color:#6b7280; line-height:1.4;">
+              Only rooms with adequate capacity (Capacity &ge; Students Needed) are evaluated, and results are returned sorted in descending score order.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Operational Flow Lifecycles -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-header">
+          <h3 class="card-title" style="font-size:1rem; font-weight:700;">🔄 End-to-End Operational Workflows</h3>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:1.25rem;">
+          <!-- Workflow 1 -->
+          <div style="border:1px solid #e5e7eb; border-radius:4px; padding:1rem;">
+            <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+              <span style="background:#111827; color:#ffffff; font-size:0.75rem; font-weight:700; padding:0.15rem 0.5rem; border-radius:3px;">FLOW 1</span>
+              <strong style="font-size:0.9rem; color:#111827;">Faculty Room Reservation & Conflict Resolution</strong>
+            </div>
+            <ol style="font-size:0.8rem; color:#374151; padding-left:1.25rem; line-height:1.6;">
+              <li><strong>Search & Select:</strong> Faculty navigates to <em>Room Discovery & Booking</em>, inputs Date, Start/End Time, Branch, and Expected Capacity.</li>
+              <li><strong>Collision Evaluation:</strong> The backend queries existing bookings for that room and time window.</li>
+              <li><strong>Conflict Handling (if occupied):</strong> The system blocks the reservation, highlights the conflicting class/exam, and automatically calculates alternative available rooms scored by capacity and proximity.</li>
+              <li><strong>One-Click Booking:</strong> Faculty selects the recommended alternative, confirms with one click, and receives a confirmed booking record.</li>
+              <li><strong>Audit & Notification:</strong> The booking is recorded in the permanent audit trail and instantly reflected on the live 2D Blueprints and Academic Timetable.</li>
+            </ol>
+          </div>
+
+          <!-- Workflow 2 -->
+          <div style="border:1px solid #e5e7eb; border-radius:4px; padding:1rem;">
+            <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+              <span style="background:#111827; color:#ffffff; font-size:0.75rem; font-weight:700; padding:0.15rem 0.5rem; border-radius:3px;">FLOW 2</span>
+              <strong style="font-size:0.9rem; color:#111827;">Student Conflict Reporting & Grievance Resolution</strong>
+            </div>
+            <ol style="font-size:0.8rem; color:#374151; padding-left:1.25rem; line-height:1.6;">
+              <li><strong>Discovery:</strong> A student arrives at a classroom and notices a clash, locked door, projector defect, or unscheduled exam.</li>
+              <li><strong>Submission:</strong> The student opens <em>Conflict & Issue Reports</em>, enters the room number, issue type (Double-booking, Facility, Exam clash), and a description.</li>
+              <li><strong>Triage:</strong> The issue immediately appears on the Faculty and Admin dashboards with an "Open" status pill.</li>
+              <li><strong>Staff Action:</strong> Faculty or Admin reviews the complaint, relocates the session if necessary, and marks the report "Resolved" with explanatory staff resolution notes.</li>
+              <li><strong>Transparency:</strong> All students can verify the resolution status and notes directly from their student dashboard.</li>
+            </ol>
+          </div>
+
+          <!-- Workflow 3 -->
+          <div style="border:1px solid #e5e7eb; border-radius:4px; padding:1rem;">
+            <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+              <span style="background:#111827; color:#ffffff; font-size:0.75rem; font-weight:700; padding:0.15rem 0.5rem; border-radius:3px;">FLOW 3</span>
+              <strong style="font-size:0.9rem; color:#111827;">NSS Minor Exam Notice & Timetable Synchronization</strong>
+            </div>
+            <ol style="font-size:0.8rem; color:#374151; padding-left:1.25rem; line-height:1.6;">
+              <li><strong>Notice Broadcast:</strong> Faculty publishes an urgent Minor Examination announcement specifying Date, Time, Room, and Target Branch.</li>
+              <li><strong>High Priority Banner:</strong> The notice is flagged as "High" priority, pinning it to the top of the Announcements tab with a black outline badge.</li>
+              <li><strong>Timetable Integration:</strong> Students filter the Academic Timetable by their branch/year, seeing the newly reserved exam slot immediately.</li>
+              <li><strong>Offline Export:</strong> Students or CRs click <em>"Download CSV"</em> to get a portable spreadsheet of all branch examinations for offline reference.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Complete REST API Reference -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-header">
+          <h3 class="card-title" style="font-size:1rem; font-weight:700;">📡 REST API Endpoints Specification</h3>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Endpoint Route</th>
+                <th>Access Level</th>
+                <th>Input Parameters / Payload</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody style="font-size:0.8rem;">
+              <tr>
+                <td><span class="badge" style="background:#111827; color:#fff;">POST</span></td>
+                <td><code>/auth/login</code></td>
+                <td>Public</td>
+                <td><code>{ email, password }</code></td>
+                <td>Authenticates user and returns session Bearer token + role context.</td>
+              </tr>
+              <tr>
+                <td><span class="badge" style="background:#f3f4f6; color:#111827; border:1px solid #d1d5db;">GET</span></td>
+                <td><code>/rooms/blueprints</code></td>
+                <td>All (Student+)</td>
+                <td><code>building, floor, date, time</code></td>
+                <td>Returns live 2D vacancy grid status for IET floors &amp; Deeksha Bhawan.</td>
+              </tr>
+              <tr>
+                <td><span class="badge" style="background:#f3f4f6; color:#111827; border:1px solid #d1d5db;">GET</span></td>
+                <td><code>/rooms/availability</code></td>
+                <td>All (Student+)</td>
+                <td><code>date, start_time, end_time, capacity, type</code></td>
+                <td>Lists available rooms matching criteria, with smart alternatives if busy.</td>
+              </tr>
+              <tr>
+                <td><span class="badge" style="background:#111827; color:#fff;">POST</span></td>
+                <td><code>/bookings/reserve</code></td>
+                <td>Faculty / Admin</td>
+                <td><code>{ room_id, date, start_time, end_time, purpose, branch, year }</code></td>
+                <td>Atomic reservation. Enforces overlap prevention &amp; returns 409 if clashing.</td>
+              </tr>
+              <tr>
+                <td><span class="badge" style="background:#b91c1c; color:#fff;">DELETE</span></td>
+                <td><code>/bookings/{id}</code></td>
+                <td>Faculty (Own) / Admin</td>
+                <td><code>booking_id</code></td>
+                <td>Cancels booking. Faculty can cancel their own; Admin can cancel any.</td>
+              </tr>
+              <tr>
+                <td><span class="badge" style="background:#f3f4f6; color:#111827; border:1px solid #d1d5db;">GET</span></td>
+                <td><code>/schedule/view</code></td>
+                <td>All (Student+)</td>
+                <td><code>branch, year, date, format (json/csv)</code></td>
+                <td>Returns academic timetable or initiates CSV spreadsheet download.</td>
+              </tr>
+              <tr>
+                <td><span class="badge" style="background:#111827; color:#fff;">POST</span></td>
+                <td><code>/notices/publish</code></td>
+                <td>Faculty / Admin</td>
+                <td><code>{ title, content, target_branch, priority, expires_at }</code></td>
+                <td>Publishes official exam notices, advisories, and reschedule alerts.</td>
+              </tr>
+              <tr>
+                <td><span class="badge" style="background:#111827; color:#fff;">POST</span></td>
+                <td><code>/reports/submit</code></td>
+                <td>All (Student+)</td>
+                <td><code>{ room_id, report_type, description }</code></td>
+                <td>Logs classroom conflict, locked door, or facility malfunction complaint.</td>
+              </tr>
+              <tr>
+                <td><span class="badge" style="background:#111827; color:#fff;">PATCH</span></td>
+                <td><code>/reports/{id}/resolve</code></td>
+                <td>Faculty / Admin</td>
+                <td><code>{ resolution_notes, status }</code></td>
+                <td>Updates report status to Resolved with staff notes for student visibility.</td>
+              </tr>
+              <tr>
+                <td><span class="badge" style="background:#f3f4f6; color:#111827; border:1px solid #d1d5db;">GET</span></td>
+                <td><code>/audit/logs</code></td>
+                <td>Faculty / Admin</td>
+                <td><code>limit, offset</code></td>
+                <td>Returns chronological audit ledger of all booking actions, cancellations, and notices.</td>
+              </tr>
+              <tr>
+                <td><span class="badge" style="background:#111827; color:#fff;">POST</span></td>
+                <td><code>/ai/query</code></td>
+                <td>All (Student+)</td>
+                <td><code>{ query }</code></td>
+                <td>Heuristic Natural Language query engine for campus vacancy queries.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Deployment & DevOps Runbook -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title" style="font-size:1rem; font-weight:700;">🚀 DevOps, Deployment & Local Runbook</h3>
+        </div>
+        <div style="font-size:0.85rem; color:#374151; line-height:1.6;">
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:1.25rem;">
+            <!-- Run Locally -->
+            <div style="border:1px solid #e5e7eb; padding:1rem; border-radius:4px;">
+              <strong style="color:#111827; display:block; margin-bottom:0.5rem;">1. Run Locally (Python 3.10+)</strong>
+              <div style="background:#f9fafb; border:1px solid #d1d5db; padding:0.6rem; border-radius:4px; font-family:monospace; font-size:0.75rem; color:#111827; line-height:1.5;">
+                git clone https://github.com/ayushsrivastav9598-glitch/sccs.git<br/>
+                cd sccs<br/>
+                pip install -r requirements.txt<br/>
+                python -m uvicorn main:app --reload --port 8000
+              </div>
+              <p style="font-size:0.75rem; color:#6b7280; margin-top:0.5rem;">
+                Open <code>http://127.0.0.1:8000</code> in your browser. Database auto-initializes and seeds with sample data on startup.
+              </p>
+            </div>
+
+            <!-- Docker -->
+            <div style="border:1px solid #e5e7eb; padding:1rem; border-radius:4px;">
+              <strong style="color:#111827; display:block; margin-bottom:0.5rem;">2. Docker & Containerization</strong>
+              <div style="background:#f9fafb; border:1px solid #d1d5db; padding:0.6rem; border-radius:4px; font-family:monospace; font-size:0.75rem; color:#111827; line-height:1.5;">
+                docker build -t ddugu-sccs .<br/>
+                docker run -p 8000:8000 ddugu-sccs<br/>
+                # Or with Compose:<br/>
+                docker-compose up --build
+              </div>
+              <p style="font-size:0.75rem; color:#6b7280; margin-top:0.5rem;">
+                Production-ready multi-stage Dockerfile with non-root security user and automated health checks.
+              </p>
+            </div>
+
+            <!-- Cloud Deployment -->
+            <div style="border:1px solid #e5e7eb; padding:1rem; border-radius:4px;">
+              <strong style="color:#111827; display:block; margin-bottom:0.5rem;">3. Cloud Deployment (Render.com)</strong>
+              <p style="font-size:0.78rem; color:#4b5563; margin-bottom:0.5rem;">
+                Since SCCS requires a persistent Python/FastAPI backend with SQLite database write access, <strong>Render.com</strong> or Railway is ideal (not GitHub Pages, which is static-only).
+              </p>
+              <div style="background:#f9fafb; border:1px solid #d1d5db; padding:0.6rem; border-radius:4px; font-family:monospace; font-size:0.75rem; color:#111827; line-height:1.5;">
+                Build Command: pip install -r requirements.txt<br/>
+                Start Command: uvicorn main:app --host 0.0.0.0 --port $PORT
+              </div>
+              <p style="font-size:0.75rem; color:#6b7280; margin-top:0.5rem;">
+                Configured automatically via <code>render.yaml</code> in the repository root.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
