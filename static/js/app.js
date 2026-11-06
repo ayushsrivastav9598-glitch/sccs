@@ -52,7 +52,9 @@ function setupEventListeners() {
     document.querySelectorAll(".nav-tab").forEach(tab => {
         tab.addEventListener("click", () => {
             const target = tab.dataset.tab;
-            switchTab(target);
+            if (target) {
+                switchTab(target);
+            }
         });
     });
 

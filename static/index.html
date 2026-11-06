@@ -62,9 +62,26 @@
         <div class="nav-tab" data-tab="tab-audit">Audit Log & History</div>
         <div class="nav-tab" data-tab="tab-roles">Roles & Permissions</div>
         <div class="nav-tab" data-tab="tab-docs">Docs & Architecture</div>
+        <a href="/docs" target="_blank" class="nav-tab nav-tab-external" title="Open Interactive Swagger UI in new tab">
+          <span style="display:flex; align-items:center; gap:0.4rem;">
+            <span>⚡</span>
+            <span>Swagger API (/docs)</span>
+          </span>
+          <span style="font-size:0.75rem; opacity:0.6;">↗</span>
+        </a>
       </nav>
       <div class="sidebar-footer">
-        <div style="font-size:0.75rem; color:#6b7280; line-height:1.4;">
+        <div style="margin-bottom:0.65rem; display:flex; flex-direction:column; gap:0.35rem;">
+          <a href="/docs" target="_blank" class="btn btn-sm btn-secondary" style="display:flex; justify-content:space-between; align-items:center; width:100%; text-decoration:none; font-size:0.75rem; padding:0.35rem 0.6rem;">
+            <span>⚡ Interactive Swagger</span>
+            <span>↗</span>
+          </a>
+          <a href="/redoc" target="_blank" class="btn btn-sm btn-secondary" style="display:flex; justify-content:space-between; align-items:center; width:100%; text-decoration:none; font-size:0.75rem; padding:0.35rem 0.6rem;">
+            <span>📚 ReDoc OpenAPI</span>
+            <span>↗</span>
+          </a>
+        </div>
+        <div style="font-size:0.72rem; color:#6b7280; line-height:1.4;">
           <strong>DDU Gorakhpur University</strong><br/>
           IET &bull; Deeksha Bhawan
         </div>
@@ -790,6 +807,31 @@
           <strong>Institute of Engineering & Technology (IET)</strong> (Ground, 1st, 2nd floors) and <strong>Deeksha Bhawan</strong> (~100m walking distance, 14 lecture halls) 
           serving 6 engineering branches (CSE, AI ML, AI DS, ECE, ME, IT) across 4 academic years.
         </p>
+      </div>
+
+      <!-- Interactive Swagger API Live Card -->
+      <div class="card" style="margin-bottom:1.5rem; background:#ffffff; border:1.5px solid #111827;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.25rem;">
+              <span class="badge" style="background:#111827; color:#fff; font-size:0.75rem;">LIVE OPENAPI</span>
+              <strong style="font-size:0.95rem; color:#111827;">Interactive Swagger UI & ReDoc Documentation</strong>
+            </div>
+            <p style="font-size:0.8rem; color:#4b5563; margin:0;">
+              FastAPI auto-generates comprehensive OpenAPI specifications for all 26 endpoints across 10 functional modules. Execute requests live in your browser.
+            </p>
+          </div>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <a href="/docs" target="_blank" class="btn btn-primary btn-sm" style="text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem;">
+              <span>⚡ Open Swagger UI (/docs)</span>
+              <span>↗</span>
+            </a>
+            <a href="/redoc" target="_blank" class="btn btn-secondary btn-sm" style="text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem;">
+              <span>📚 Open ReDoc (/redoc)</span>
+              <span>↗</span>
+            </a>
+          </div>
+        </div>
       </div>
 
       <!-- Problem Solved & Real-World Context -->

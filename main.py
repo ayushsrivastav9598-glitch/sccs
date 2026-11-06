@@ -30,11 +30,57 @@ async def lifespan(app: FastAPI):
     seed_database()
     yield
 
+tags_metadata = [
+    {
+        "name": "Rooms & Blueprints",
+        "description": "Interactive 2D spatial vacancy queries, floor plans, and capacity filtering for IET Main Building (Ground, 1st, 2nd floors) and Deeksha Bhawan (LH01-LH14).",
+    },
+    {
+        "name": "Faculty Booking & Conflict Prevention",
+        "description": "Conflict-proof atomic room reservations, interval overlap validation (max(S1,S2) < min(E1,E2)), and heuristic alternative venue recommendations.",
+    },
+    {
+        "name": "Academic Schedules & Student Access",
+        "description": "Multi-branch timetable discovery, semester schedule queries, and dynamic CSV/JSON spreadsheet export for 6 engineering branches.",
+    },
+    {
+        "name": "Academic Notices & Schedule Updates",
+        "description": "High-priority NSS minor exam announcements, schedule updates, and urgent cancellation alerts.",
+    },
+    {
+        "name": "Student Grievance & Conflict Reporting",
+        "description": "Student reporting of classroom clashes, equipment faults, locked halls, and staff resolution workflow.",
+    },
+    {
+        "name": "Intelligent Assistance",
+        "description": "Natural language heuristic campus assistant for intelligent room vacancy queries and timetable guidance.",
+    },
+    {
+        "name": "Accountability & Audit Trail",
+        "description": "Immutable, chronological audit ledger for reservations, notices, cancellations, and administrative overrides.",
+    },
+    {
+        "name": "Authentication",
+        "description": "PBKDF2-based password hashing, bearer tokens, and Role-Based Access Control (Admin, Faculty, Student).",
+    },
+    {
+        "name": "System Health & Web UI",
+        "description": "Root web application entry point, status checks, and browser UI serving.",
+    },
+    {
+        "name": "Student Registration & Profile (Legacy)",
+        "description": "Original student management endpoints preserved for backwards compatibility.",
+    },
+]
+
 app = FastAPI(
-    title="Smart Campus Classroom System",
-    description="Intelligent campus coordination, room discovery, conflict prevention, and schedule management for DDUGU IET & Deeksha Bhawan.",
+    title="Smart Campus Classroom Management System",
+    description="Official API Documentation & Interactive Swagger Playground for Deen Dayal Upadhyaya Gorakhpur University (DDUGU) — IET & Deeksha Bhawan.",
     version="1.0.0",
-    lifespan=lifespan
+    lifespan=lifespan,
+    openapi_tags=tags_metadata,
+    docs_url="/docs",
+    redoc_url="/redoc"
 )
 
 # CORS Middleware
@@ -72,7 +118,7 @@ class Login(BaseModel):
     password: str
 
 # Home Endpoint - Serves HTML UI for web browsers and JSON status for API clients
-@app.get("/")
+@app.get("/", tags=["System Health & Web UI"], summary="System Status & Web Entrypoint")
 def home(request: Request):
     accept = request.headers.get("accept", "")
     if "text/html" in accept and os.path.exists(os.path.join(static_dir, "index.html")):
@@ -84,7 +130,7 @@ def home(request: Request):
         "web_ui": "/ui"
     }
 
-@app.get("/ui")
+@app.get("/ui", tags=["System Health & Web UI"], summary="Web Application UI")
 def ui():
     index_path = os.path.join(static_dir, "index.html")
     if os.path.exists(index_path):
@@ -92,7 +138,7 @@ def ui():
     return {"message": "UI assets loading"}
 
 # ==================== Preserved Original Endpoints ====================
-@app.post("/students/register")
+@app.post("/students/register", tags=["Student Registration & Profile (Legacy)"], summary="Register New Student")
 def register_student(student: Student):
     salt = secrets.token_hex(16)
     password_hash = hashlib.pbkdf2_hmac(
@@ -127,7 +173,7 @@ def register_student(student: Student):
     finally:
         conn.close()
 
-@app.post("/students/login")
+@app.post("/students/login", tags=["Student Registration & Profile (Legacy)"], summary="Student Login")
 def login_student(login: Login):
     conn = get_db()
     try:
@@ -158,7 +204,7 @@ def login_student(login: Login):
     finally:
         conn.close()
 
-@app.put("/students/{student_id}")
+@app.put("/students/{student_id}", tags=["Student Registration & Profile (Legacy)"], summary="Update Student Details")
 def update_student(student_id: int, student: Student):
     conn = get_db()
     try:
@@ -179,7 +225,7 @@ def update_student(student_id: int, student: Student):
     finally:
         conn.close()
 
-@app.get("/students")
+@app.get("/students", tags=["Student Registration & Profile (Legacy)"], summary="List All Students")
 def get_students():
     conn = get_db()
     students = conn.execute(
