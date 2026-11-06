@@ -13,7 +13,7 @@
   <header class="header">
     <div class="header-top">
       <div class="brand">
-        <div class="brand-logo">🏛️</div>
+        <div class="brand-logo">S</div>
         <div class="brand-text">
           <h1>Smart Campus Classroom Management System</h1>
           <p>Deen Dayal Upadhyaya Gorakhpur University (DDUGU) &bull; IET & Deeksha Bhawan</p>
@@ -23,27 +23,27 @@
         <div class="user-badge">
           <span id="user-role-pill" class="role-pill role-faculty">FACULTY</span>
           <span id="user-display-name">Dr. R. K. Sharma</span>
-          <span id="user-branch-display" style="font-size:0.75rem; color:#cbd5e1;">(CSE)</span>
+          <span id="user-branch-display" style="font-size:0.75rem; color:#6b7280;">(CSE)</span>
         </div>
         <div style="display:flex; gap:0.35rem;">
           <button class="btn btn-sm btn-secondary" onclick="loginAs('student')" title="Switch to Student Persona">Student</button>
           <button class="btn btn-sm btn-secondary" onclick="loginAs('faculty')" title="Switch to Faculty Persona">Faculty</button>
           <button class="btn btn-sm btn-secondary" onclick="loginAs('admin')" title="Switch to Admin Persona">Admin</button>
         </div>
-        <div id="live-clock" style="font-size:0.8rem; color:#cbd5e1; font-family:monospace;"></div>
+        <div id="live-clock"></div>
       </div>
     </div>
   </header>
 
   <!-- Navigation Tabs -->
   <nav class="nav-tabs">
-    <div class="nav-tab active" data-tab="tab-blueprints">🗺️ Campus Blueprints</div>
-    <div class="nav-tab" data-tab="tab-booking">🔍 Room Discovery & Booking</div>
-    <div class="nav-tab" data-tab="tab-timetable">📅 Academic Timetable</div>
-    <div class="nav-tab" data-tab="tab-notices">📢 Announcements & Exams</div>
-    <div class="nav-tab" data-tab="tab-reports">🚩 Conflict & Issue Reports</div>
-    <div class="nav-tab" data-tab="tab-ai">🤖 AI Campus Assistant</div>
-    <div class="nav-tab" data-tab="tab-audit">📜 Audit Log & History</div>
+    <div class="nav-tab active" data-tab="tab-blueprints">Campus Blueprints</div>
+    <div class="nav-tab" data-tab="tab-booking">Room Discovery & Booking</div>
+    <div class="nav-tab" data-tab="tab-timetable">Academic Timetable</div>
+    <div class="nav-tab" data-tab="tab-notices">Announcements & Exams</div>
+    <div class="nav-tab" data-tab="tab-reports">Conflict & Issue Reports</div>
+    <div class="nav-tab" data-tab="tab-ai">AI Campus Assistant</div>
+    <div class="nav-tab" data-tab="tab-audit">Audit Log & History</div>
   </nav>
 
   <!-- Main Container -->
@@ -53,38 +53,47 @@
     <div id="tab-blueprints" class="tab-pane active">
       <div class="blueprint-wrapper">
         <div class="blueprint-toolbar">
-          <div style="display:flex; gap:0.5rem; align-items:center;">
+          <div style="display:flex; gap:0.4rem; align-items:center;">
             <button class="floor-btn building-tab-btn active" data-building="IET" onclick="selectBuilding('IET')">
-              🏛️ IET Main Building
+              IET Main Building
             </button>
             <button class="floor-btn building-tab-btn" data-building="DEEKSHA_BHAWAN" onclick="selectBuilding('DEEKSHA_BHAWAN')">
-              🏢 Deeksha Bhawan (~100m)
+              Deeksha Bhawan (~100m)
             </button>
           </div>
 
-          <div style="display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
-            <label style="font-size:0.85rem; color:#94a3b8;">Floor:</label>
+          <div style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
+            <label style="font-size:0.8rem; font-weight:600; color:#4b5563;">Floor:</label>
             <div id="floor-buttons-container" class="floor-selector">
               <button class="floor-btn" onclick="selectFloor('Ground')">Ground</button>
               <button class="floor-btn active" onclick="selectFloor('1st Floor')">1st Floor</button>
               <button class="floor-btn" onclick="selectFloor('2nd Floor')">2nd Floor</button>
             </div>
-            <div style="display:flex; align-items:center; gap:0.5rem; margin-left:0.5rem;">
-              <input type="date" id="bp-date-filter" class="form-control" style="width:140px; padding:0.3rem 0.5rem; font-size:0.8rem; background:#1e293b; color:white; border-color:#334155;">
-              <input type="time" id="bp-time-filter" value="10:00" class="form-control" style="width:100px; padding:0.3rem 0.5rem; font-size:0.8rem; background:#1e293b; color:white; border-color:#334155;">
-              <button class="btn btn-sm btn-primary" onclick="loadBlueprints()">Refresh Map</button>
+            <div style="display:flex; align-items:center; gap:0.4rem; margin-left:0.5rem;">
+              <input type="date" id="bp-date-filter" class="form-control" style="width:135px; padding:0.25rem 0.5rem; font-size:0.8rem;">
+              <input type="time" id="bp-time-filter" value="10:00" class="form-control" style="width:95px; padding:0.25rem 0.5rem; font-size:0.8rem;">
+              <button class="btn btn-sm btn-primary" onclick="loadBlueprints()">Check Vacancy</button>
             </div>
           </div>
         </div>
 
-        <div id="blueprint-floor-info" style="font-size:0.9rem; color:#93c5fd; margin-bottom:0.75rem;">
-          <strong>Institute of Engineering and Technology (IET)</strong> &mdash; 1st Floor
+        <div id="blueprint-floor-info" style="font-size:0.85rem; color:#111827; font-weight:600; margin-bottom:0.75rem;">
+          Institute of Engineering and Technology (IET) &mdash; 1st Floor
         </div>
 
-        <div style="display:flex; gap:1.25rem; font-size:0.8rem; margin-bottom:0.75rem; color:#94a3b8;">
-          <span style="display:flex; align-items:center; gap:0.35rem;"><span style="width:12px; height:12px; background:#10b981; border-radius:3px; display:inline-block;"></span> Vacant / Available</span>
-          <span style="display:flex; align-items:center; gap:0.35rem;"><span style="width:12px; height:12px; background:#ef4444; border-radius:3px; display:inline-block;"></span> Occupied / Scheduled</span>
-          <span style="display:flex; align-items:center; gap:0.35rem;"><span style="width:12px; height:12px; background:#f59e0b; border-radius:3px; display:inline-block;"></span> Minor Exam in Session</span>
+        <div style="display:flex; gap:1.25rem; font-size:0.75rem; margin-bottom:0.75rem; color:#4b5563;">
+          <span style="display:flex; align-items:center; gap:0.35rem;">
+            <span style="width:10px; height:10px; background:#10b981; border-radius:2px; display:inline-block;"></span>
+            Vacant & Available
+          </span>
+          <span style="display:flex; align-items:center; gap:0.35rem;">
+            <span style="width:10px; height:10px; background:#ef4444; border-radius:2px; display:inline-block;"></span>
+            Occupied / Scheduled
+          </span>
+          <span style="display:flex; align-items:center; gap:0.35rem;">
+            <span style="width:10px; height:10px; background:#6b7280; border-radius:2px; display:inline-block;"></span>
+            Click room to view facilities & reserve
+          </span>
         </div>
 
         <!-- Visual Room Nodes Canvas -->
@@ -100,7 +109,7 @@
         <!-- Search Availability Panel -->
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">🔍 Search Room Availability</h3>
+            <h3 class="card-title">Search Room Availability</h3>
           </div>
           <form onsubmit="event.preventDefault(); searchAvailability();">
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem;">
@@ -116,7 +125,7 @@
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem;">
               <div class="form-group">
-                <label>Duration (Minutes)</label>
+                <label>Duration</label>
                 <select id="avail-duration" class="form-control">
                   <option value="60">60 mins (1 Hour)</option>
                   <option value="90">90 mins (1.5 Hours)</option>
@@ -125,14 +134,14 @@
                 </select>
               </div>
               <div class="form-group">
-                <label>Required Capacity</label>
+                <label>Required Capacity (Seats)</label>
                 <input type="number" id="avail-capacity" placeholder="e.g. 75" class="form-control">
               </div>
             </div>
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem;">
               <div class="form-group">
-                <label>Building</label>
+                <label>Building Filter</label>
                 <select id="avail-building" class="form-control">
                   <option value="ALL">All Buildings (IET & DB)</option>
                   <option value="IET">IET Main Building</option>
@@ -140,7 +149,7 @@
                 </select>
               </div>
               <div class="form-group">
-                <label>Room Type</label>
+                <label>Room Category</label>
                 <select id="avail-type" class="form-control">
                   <option value="ALL">All Types</option>
                   <option value="Classroom">Classroom</option>
@@ -151,8 +160,8 @@
               </div>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width:100%;">
-              Search Available Rooms
+            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:0.5rem;">
+              Find Vacant Rooms
             </button>
           </form>
 
@@ -164,8 +173,8 @@
         <!-- Faculty Booking Form -->
         <div class="card" id="booking-form-card">
           <div class="card-header">
-            <h3 class="card-title">📝 Faculty Room Reservation</h3>
-            <span class="badge" style="background:#dbeafe; color:#1e40af;">Conflict Protected</span>
+            <h3 class="card-title">Faculty Room Reservation</h3>
+            <span class="badge">Conflict Protected</span>
           </div>
 
           <div id="booking-conflict-alert" style="display:none;"></div>
@@ -217,8 +226,8 @@
             </div>
 
             <div class="form-group">
-              <label>Event / Course Title *</label>
-              <input type="text" id="book-title" placeholder="e.g. Minor Exam: Operating Systems" class="form-control" required>
+              <label>Course / Subject Title *</label>
+              <input type="text" id="book-title" placeholder="e.g. Operating Systems Minor Exam" class="form-control" required>
             </div>
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem;">
@@ -298,8 +307,8 @@
 
             <div class="form-group" style="display:flex; align-items:center; gap:0.5rem;">
               <input type="checkbox" id="book-is-test" checked>
-              <label for="book-is-test" style="margin-bottom:0; font-weight:normal; font-size:0.85rem; color:#64748b;">
-                Mark as Test Data (Clearly identified in system as per competition instructions)
+              <label for="book-is-test" style="margin-bottom:0; font-weight:normal; font-size:0.8rem; color:#6b7280;">
+                Mark as Test Data (clearly identified in logs and timetable)
               </label>
             </div>
 
@@ -315,9 +324,9 @@
     <div id="tab-timetable" class="tab-pane">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">📅 Academic Schedule & Timetable (Student Portal)</h3>
-          <div style="display:flex; gap:0.5rem;">
-            <select id="tt-branch" class="form-control" style="width:130px;" onchange="loadTimetable()">
+          <h3 class="card-title">Academic Schedule & Timetable (Student Portal)</h3>
+          <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+            <select id="tt-branch" class="form-control" style="width:120px;" onchange="loadTimetable()">
               <option value="CSE" selected>CSE</option>
               <option value="AI ML">AI ML</option>
               <option value="AI DS">AI DS</option>
@@ -326,20 +335,20 @@
               <option value="IT">IT</option>
               <option value="ALL">All Branches</option>
             </select>
-            <select id="tt-year" class="form-control" style="width:110px;" onchange="loadTimetable()">
+            <select id="tt-year" class="form-control" style="width:105px;" onchange="loadTimetable()">
               <option value="1">1st Year</option>
               <option value="2">2nd Year</option>
               <option value="3" selected>3rd Year</option>
               <option value="4">4th Year</option>
               <option value="0">All Years</option>
             </select>
-            <select id="tt-section" class="form-control" style="width:110px;" onchange="loadTimetable()">
+            <select id="tt-section" class="form-control" style="width:105px;" onchange="loadTimetable()">
               <option value="A" selected>Section A</option>
               <option value="B">Section B</option>
               <option value="ALL">All Sections</option>
             </select>
             <button class="btn btn-secondary btn-sm" onclick="loadTimetable()">Refresh</button>
-            <button class="btn btn-primary btn-sm" onclick="downloadTimetable('csv')">📥 Export CSV</button>
+            <button class="btn btn-primary btn-sm" onclick="downloadTimetable('csv')">Export CSV</button>
             <button class="btn btn-secondary btn-sm" onclick="downloadTimetable('json')">Export JSON</button>
           </div>
         </div>
@@ -353,7 +362,7 @@
                 <th>Room & Location</th>
                 <th>Subject / Title</th>
                 <th>Purpose</th>
-                <th>Faculty / In-Charge</th>
+                <th>Faculty In-Charge</th>
               </tr>
             </thead>
             <tbody id="timetable-tbody">
@@ -368,8 +377,8 @@
     <div id="tab-notices" class="tab-pane">
       <div class="grid-2">
         <div>
-          <h3 style="font-size:1.2rem; color:var(--primary-dark); margin-bottom:1rem;">
-            📢 Official Campus Notices & Minor Exam Bulletins
+          <h3 style="font-size:1.05rem; font-weight:700; color:#111827; margin-bottom:0.85rem;">
+            Official Campus Notices & Minor Exam Bulletins
           </h3>
           <div id="notices-feed">
             <!-- Notices rendered dynamically -->
@@ -379,7 +388,7 @@
         <!-- Post Notice Card (Faculty & Admin) -->
         <div class="card faculty-only">
           <div class="card-header">
-            <h3 class="card-title">✍️ Publish Schedule Update / Examination Notice</h3>
+            <h3 class="card-title">Publish Schedule Update / Notice</h3>
           </div>
           <form id="notice-form" onsubmit="handleNoticeSubmit(event);">
             <div class="form-group">
@@ -388,7 +397,7 @@
             </div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem;">
               <div class="form-group">
-                <label>Notice Category</label>
+                <label>Category</label>
                 <select id="notice-type" class="form-control">
                   <option value="EXAM_SCHEDULE">Examination Notice</option>
                   <option value="RESCHEDULING">Rescheduled Lecture</option>
@@ -433,7 +442,7 @@
 
             <div class="form-group">
               <label>Detailed Announcement Text *</label>
-              <textarea id="notice-content" rows="4" placeholder="Specify room numbers (e.g. Deeksha Bhawan LH01), batch timings, and required documents..." class="form-control" required></textarea>
+              <textarea id="notice-content" rows="4" placeholder="Specify room numbers (e.g. Deeksha Bhawan LH01), batch timings, and instructions..." class="form-control" required></textarea>
             </div>
 
             <button type="submit" class="btn btn-primary" style="width:100%;">
@@ -449,9 +458,9 @@
       <div class="grid-2">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">🚩 Report Outdated / Conflicting Schedule</h3>
+            <h3 class="card-title">Report Outdated / Conflicting Schedule</h3>
           </div>
-          <p style="font-size:0.85rem; color:#64748b; margin-bottom:1rem;">
+          <p style="font-size:0.8rem; color:#6b7280; margin-bottom:1rem;">
             Notice a schedule clash or outdated classroom assignment? Submit a grievance report so academic coordinators can resolve it immediately without conflicting bookings.
           </p>
           <form id="report-form" onsubmit="handleStudentReportSubmit(event);">
@@ -481,7 +490,7 @@
 
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">📋 Active Conflict Reports & Responses</h3>
+            <h3 class="card-title">Active Conflict Reports & Responses</h3>
             <button class="btn btn-sm btn-secondary" onclick="loadReports()">Refresh</button>
           </div>
           <div id="reports-list">
@@ -495,9 +504,9 @@
     <div id="tab-ai" class="tab-pane">
       <div class="card" style="max-width:900px; margin:0 auto;">
         <div class="card-header">
-          <h3 class="card-title">🤖 AI Smart Scheduling & Natural Language Query</h3>
+          <h3 class="card-title">AI Smart Scheduling Assistant</h3>
         </div>
-        <p style="font-size:0.85rem; color:#64748b; margin-bottom:1rem;">
+        <p style="font-size:0.8rem; color:#6b7280; margin-bottom:1rem;">
           Query room availability, calculate optimal allocations based on batch sizes, and find overflow rooms in Deeksha Bhawan using natural language.
         </p>
 
@@ -507,8 +516,8 @@
         </div>
 
         <div style="margin-bottom:1.25rem;">
-          <span style="font-size:0.8rem; color:#64748b; font-weight:600;">Quick Test Queries:</span>
-          <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.4rem;">
+          <span style="font-size:0.75rem; color:#6b7280; font-weight:600;">Quick Test Queries:</span>
+          <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-top:0.35rem;">
             <button class="btn btn-sm btn-secondary" onclick="askAI('Find a room for 75 CSE students tomorrow at 10:00 AM')">75 CSE Students at 10 AM</button>
             <button class="btn btn-sm btn-secondary" onclick="askAI('Where can we conduct 3rd year minor examination for 150 students?')">150 Students Minor Exam</button>
             <button class="btn btn-sm btn-secondary" onclick="askAI('Find a vacant lab for 40 students practical session')">40 Students Lab Session</button>
@@ -517,7 +526,7 @@
         </div>
 
         <div id="ai-response-box">
-          <div style="text-align:center; color:#94a3b8; padding:2rem; background:#f8fafc; border-radius:8px;">
+          <div style="text-align:center; color:#9ca3af; padding:2rem; background:#f9fafb; border:1px solid #e5e7eb; border-radius:6px;">
             Enter a prompt above or click one of the quick test queries to see AI-driven schedule optimization.
           </div>
         </div>
@@ -528,10 +537,10 @@
     <div id="tab-audit" class="tab-pane">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">📜 Accountability & Audit Trail</h3>
+          <h3 class="card-title">Accountability & Audit Trail</h3>
           <button class="btn btn-sm btn-secondary" onclick="loadAudit()">Refresh Audit</button>
         </div>
-        <p style="font-size:0.85rem; color:#64748b; margin-bottom:1rem;">
+        <p style="font-size:0.8rem; color:#6b7280; margin-bottom:1rem;">
           Maintains a complete timestamped history of all bookings, cancellations, rescheduling, and announcements to resolve misunderstandings.
         </p>
         <div id="audit-timeline" class="timeline">
@@ -550,18 +559,18 @@
         <button class="modal-close" onclick="closeRoomModal()">&times;</button>
       </div>
 
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem; margin-bottom:1rem; font-size:0.9rem;">
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem; margin-bottom:1rem; font-size:0.85rem;">
         <div><strong>Location:</strong> <span id="modal-room-building"></span></div>
         <div><strong>Seating Capacity:</strong> <span id="modal-room-capacity"></span></div>
         <div><strong>Room Type:</strong> <span id="modal-room-type"></span></div>
         <div><strong>Permitted Uses:</strong> <span id="modal-room-permitted"></span></div>
       </div>
 
-      <div style="margin-bottom:1rem; font-size:0.85rem; background:#f8fafc; padding:0.75rem; border-radius:6px;">
+      <div style="margin-bottom:1rem; font-size:0.8rem; background:#f9fafb; border:1px solid #e5e7eb; padding:0.65rem; border-radius:4px;">
         <strong>Installed Facilities:</strong> <span id="modal-room-facilities"></span>
       </div>
 
-      <h4 style="font-size:1rem; margin-bottom:0.5rem; color:var(--primary);">Upcoming Room Schedule:</h4>
+      <h4 style="font-size:0.9rem; margin-bottom:0.5rem; color:#111827;">Upcoming Room Schedule:</h4>
       <div class="table-responsive" style="max-height:200px; overflow-y:auto; margin-bottom:1.25rem;">
         <table>
           <thead>
@@ -577,7 +586,7 @@
         </table>
       </div>
 
-      <div style="display:flex; justify-content:flex-end; gap:0.75rem;">
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
         <button class="btn btn-secondary" onclick="closeRoomModal()">Close</button>
         <button class="btn btn-primary" onclick="quickBookFromModal()">Reserve This Room</button>
       </div>
@@ -586,10 +595,9 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <p>Smart Campus Classroom Management System &bull; GDG on Campus &bull; Deen Dayal Upadhyaya Gorakhpur University</p>
+    <p>Smart Campus Classroom Management System &bull; Deen Dayal Upadhyaya Gorakhpur University</p>
   </footer>
 
   <script src="/static/js/app.js"></script>
 </body>
 </html>
-

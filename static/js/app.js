@@ -1,7 +1,6 @@
 /**
  * Smart Campus Classroom System (SCCS)
- * Frontend Application Controller
- * Handles Blueprints, Real-time Conflict Resolution, Timetable, Notices, AI Assistant
+ * Frontend Application Controller - Clean Minimalist Black/White/Grey Edition
  */
 
 const API_BASE = "";
@@ -98,7 +97,7 @@ async function loginAs(role) {
             currentUser = data.user;
             currentUser.token = data.token;
             updateUserUI();
-            showToast(`Logged in as ${currentUser.name} (${currentUser.role})`, "success");
+            showToast(`Active persona: ${currentUser.name} (${currentUser.role.toUpperCase()})`);
         } else {
             console.error("Login failed:", data.detail);
         }
@@ -118,7 +117,7 @@ function updateUserUI() {
         rolePill.className = `role-pill role-${currentUser.role}`;
     }
     if (branchEl) {
-        branchEl.textContent = currentUser.branch ? `Branch: ${currentUser.branch}` : "";
+        branchEl.textContent = currentUser.branch ? `(${currentUser.branch})` : "";
     }
 
     // Role-dependent controls
@@ -158,7 +157,6 @@ function selectBuilding(bId) {
     currentBuilding = bId;
     document.querySelectorAll(".building-tab-btn").forEach(b => b.classList.toggle("active", b.dataset.building === bId));
 
-    // Default floor for building
     if (bId === "IET") {
         currentFloor = "1st Floor";
     } else {
@@ -201,13 +199,13 @@ function renderBlueprints() {
     if (!building) return;
 
     if (infoHeader) {
-        const distNote = building.distance_from_iet_meters > 0 ? ` (~${building.distance_from_iet_meters}m from IET Main)` : " (Main Engineering Complex)";
+        const distNote = building.distance_from_iet_meters > 0 ? ` (~${building.distance_from_iet_meters}m from IET Main)` : " (Main Complex)";
         infoHeader.innerHTML = `<strong>${building.name}</strong> &mdash; ${currentFloor} ${distNote}`;
     }
 
     const rooms = (building.floors && building.floors[currentFloor]) ? building.floors[currentFloor] : [];
     if (rooms.length === 0) {
-        canvas.innerHTML = `<div style="color: #94a3b8; padding: 2rem;">No rooms registered on this floor.</div>`;
+        canvas.innerHTML = `<div style="color: #6b7280; padding: 2rem;">No rooms registered on this floor.</div>`;
         return;
     }
 
@@ -221,7 +219,7 @@ function renderBlueprints() {
         if (isOccupied && r.current_booking) {
             const cb = r.current_booking;
             const testBadge = cb.is_test_data ? `<span class="badge badge-test">[TEST]</span> ` : "";
-            occDetail = `<div style="font-size:0.75rem; color:#fca5a5; margin-top:0.3rem;">
+            occDetail = `<div style="font-size:0.75rem; color:#4b5563; margin-top:0.35rem; border-top:1px dashed #e5e7eb; padding-top:0.25rem;">
                 ${testBadge}<strong>${escapeHtml(cb.title)}</strong><br/>
                 ${escapeHtml(cb.booked_by)} (${cb.time})
             </div>`;
@@ -231,7 +229,7 @@ function renderBlueprints() {
             <div class="room-node ${statusClass}" onclick="openRoomModal('${r.id}')" title="Click for details & booking">
                 <div class="code">${r.code}</div>
                 <div class="meta">${escapeHtml(r.name)}</div>
-                <div class="meta">Cap: <strong>${r.capacity}</strong> | ${r.room_type}</div>
+                <div class="meta">Cap: <strong>${r.capacity}</strong> &bull; ${r.room_type}</div>
                 <span class="status-tag ${tagClass}">${tagText}</span>
                 ${occDetail}
             </div>
@@ -270,7 +268,7 @@ async function openRoomModal(roomId) {
                     </tr>
                 `).join("");
             } else {
-                schedBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#64748b;">No confirmed bookings for selected date. Room is fully vacant.</td></tr>`;
+                schedBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#6b7280;">No bookings for selected date. Room is fully vacant.</td></tr>`;
             }
         }
 
@@ -325,35 +323,35 @@ function renderAvailabilityResults(data) {
     if (!container) return;
 
     if (!data.results || data.results.length === 0) {
-        container.innerHTML = `<div class="card" style="text-align:center; color:#64748b;">No matching rooms found.</div>`;
+        container.innerHTML = `<div class="card" style="text-align:center; color:#6b7280;">No matching rooms found for the selected criteria.</div>`;
         return;
     }
 
     container.innerHTML = `
-        <div style="margin-bottom: 0.75rem; font-size: 0.9rem; color: #475569;">
-            Found <strong>${data.available_rooms_count}</strong> available out of ${data.total_rooms_checked} checked rooms on <strong>${data.date} (${data.time_slot})</strong>
+        <div style="margin-bottom: 0.65rem; font-size: 0.8rem; color: #4b5563;">
+            Found <strong>${data.available_rooms_count}</strong> vacant out of ${data.total_rooms_checked} checked rooms on <strong>${data.date} (${data.time_slot})</strong>
         </div>
         <div class="grid-3">
             ${data.results.map(item => {
                 const r = item.room;
                 const isAvail = item.is_available;
                 return `
-                    <div class="card" style="border-left: 4px solid ${isAvail ? '#10b981' : '#ef4444'};">
+                    <div class="card" style="border: 1px solid ${isAvail ? '#d1d5db' : '#e5e7eb'}; background: ${isAvail ? '#ffffff' : '#fafafa'};">
                         <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                             <div>
-                                <h4 style="font-size:1.05rem;">${r.code} - ${escapeHtml(r.name)}</h4>
-                                <div style="font-size:0.8rem; color:#64748b;">${r.building_id} (${r.floor}) &bull; Cap: ${r.capacity}</div>
+                                <h4 style="font-size:0.95rem; font-weight:700;">${r.code} - ${escapeHtml(r.name)}</h4>
+                                <div style="font-size:0.75rem; color:#6b7280;">${r.building_id} (${r.floor}) &bull; Cap: ${r.capacity}</div>
                             </div>
-                            <span class="badge ${isAvail ? 'status-vacant' : 'status-occupied'}">
-                                ${isAvail ? 'Available' : 'Booked'}
+                            <span class="status-tag ${isAvail ? 'status-vacant' : 'status-occupied'}">
+                                ${isAvail ? 'Vacant' : 'Booked'}
                             </span>
                         </div>
-                        <div style="font-size:0.8rem; margin:0.5rem 0; color:#334155;">
+                        <div style="font-size:0.75rem; margin:0.4rem 0; color:#4b5563;">
                             ${escapeHtml(r.facilities || 'Standard equipment')}
                         </div>
-                        ${!isAvail ? `<div style="font-size:0.75rem; color:#dc2626; margin-bottom:0.5rem;">${escapeHtml(item.conflict_reason || '')}</div>` : ''}
+                        ${!isAvail ? `<div style="font-size:0.75rem; color:#b91c1c; margin-bottom:0.4rem;">${escapeHtml(item.conflict_reason || '')}</div>` : ''}
                         <button class="btn btn-sm ${isAvail ? 'btn-primary' : 'btn-secondary'}" onclick="prefillBooking('${r.id}', '${r.capacity}')">
-                            ${isAvail ? 'Book Room' : 'View Schedule'}
+                            ${isAvail ? 'Select Room' : 'View Schedule'}
                         </button>
                     </div>
                 `;
@@ -405,20 +403,20 @@ async function handleBookingSubmit(e) {
         const data = await res.json();
 
         if (res.status === 201) {
-            showToast("Booking confirmed successfully!", "success");
+            showToast("Booking confirmed successfully!");
             document.getElementById("booking-form").reset();
             loadBlueprints();
             loadTimetable();
             loadAudit();
         } else if (res.status === 409 || res.status === 400) {
-            // CONFLICT OR CAPACITY DETECTED: Show Smart Alternative Suggestions!
+            // Conflict or Capacity Warning
             displayConflictAlert(data);
         } else {
-            showToast(data.detail || "Booking failed", "error");
+            showToast(data.detail || "Booking failed");
         }
     } catch (err) {
-        console.error("Booking submission error:", err);
-        showToast("Error processing booking", "error");
+        console.error("Booking error:", err);
+        showToast("Error processing reservation");
     }
 }
 
@@ -427,41 +425,42 @@ function displayConflictAlert(conflictData) {
     alertBox.style.display = "block";
 
     let html = `
-        <div style="background:#fef2f2; border:1px solid #f87171; border-radius:8px; padding:1.25rem; margin-top:1rem;">
-            <div style="display:flex; align-items:center; gap:0.5rem; color:#991b1b; font-weight:700; font-size:1.1rem;">
-                <span>⚠️ Room Conflict Warning</span>
+        <div class="conflict-box">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.4rem;">
+                <h4 style="font-size:0.95rem; font-weight:700; color:#111827;">Room Conflict Warning</h4>
+                <span class="badge" style="background:#111827; color:#ffffff;">409 CONFLICT</span>
             </div>
-            <p style="color:#7f1d1d; margin:0.5rem 0 1rem 0; font-size:0.95rem;">
+            <p style="color:#4b5563; font-size:0.85rem; margin-bottom:0.85rem; line-height:1.4;">
                 ${escapeHtml(conflictData.detail)}
             </p>
     `;
 
     if (conflictData.alternative_rooms && conflictData.alternative_rooms.length > 0) {
         html += `
-            <div style="margin-top:0.75rem;">
-                <h5 style="color:#1e3a8a; font-weight:700; margin-bottom:0.5rem;">
-                    💡 Intelligent Alternative Suggestions (Same Time Slot):
-                </h5>
-                <div style="display:flex; flex-direction:column; gap:0.6rem;">
+            <div style="border-top:1px solid #e5e7eb; padding-top:0.75rem;">
+                <div style="font-size:0.8rem; font-weight:700; color:#111827; margin-bottom:0.5rem;">
+                    Suggested Available Venues for Same Time Slot:
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.4rem;">
         `;
 
         conflictData.alternative_rooms.forEach(alt => {
-            const distBadge = alt.building_id === "DEEKSHA_BHAWAN"
-                ? `<span class="badge" style="background:#e0e7ff; color:#3730a3;">Deeksha Bhawan (~100m)</span>`
-                : `<span class="badge" style="background:#d1fae5; color:#065f46;">Same Building (IET)</span>`;
-
+            const isDB = alt.building_id === "DEEKSHA_BHAWAN";
             html += `
                 <div class="alt-item">
                     <div>
-                        <strong>${alt.code} - ${escapeHtml(alt.name)}</strong> ${distBadge}
-                        <div style="font-size:0.8rem; color:#475569;">
+                        <div style="font-size:0.85rem; font-weight:700;">
+                            ${alt.code} - ${escapeHtml(alt.name)}
+                            <span class="badge" style="margin-left:0.35rem;">${isDB ? 'Deeksha Bhawan (~100m)' : 'IET Main'}</span>
+                        </div>
+                        <div style="font-size:0.75rem; color:#6b7280; margin-top:0.15rem;">
                             ${escapeHtml(alt.reason)}
                         </div>
                     </div>
-                    <div style="display:flex; align-items:center; gap:0.75rem;">
+                    <div style="display:flex; align-items:center; gap:0.5rem;">
                         <span class="alt-score">Fit: ${alt.fit_score}%</span>
                         <button class="btn btn-sm btn-primary" type="button" onclick="chooseAlternative('${alt.room_id}')">
-                            Select This Room
+                            Select Room
                         </button>
                     </div>
                 </div>
@@ -479,7 +478,7 @@ function displayConflictAlert(conflictData) {
 function chooseAlternative(altRoomId) {
     document.getElementById("book-room-id").value = altRoomId;
     document.getElementById("booking-conflict-alert").style.display = "none";
-    showToast(`Switched room to ${altRoomId}. Click 'Confirm Booking' to finalize.`, "info");
+    showToast(`Switched room to ${altRoomId}. Click 'Confirm Room Booking' to finalize.`);
 }
 
 // ==================== Timetable Module ====================
@@ -510,26 +509,26 @@ function renderTimetable(list) {
     if (!tbody) return;
 
     if (!list || list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#64748b; padding:2rem;">No scheduled lectures or exams found for this branch & year.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#6b7280; padding:2rem;">No scheduled lectures or exams found for this branch & year.</td></tr>`;
         return;
     }
 
     tbody.innerHTML = list.map(b => {
         const isExam = b.purpose.toLowerCase().includes("exam");
-        const examBadge = isExam ? `<span class="badge badge-exam">MINOR EXAM</span>` : `<span class="badge" style="background:#e0f2fe; color:#0284c7;">${b.purpose}</span>`;
+        const examBadge = isExam ? `<span class="badge badge-exam">MINOR EXAM</span>` : `<span class="badge">${b.purpose}</span>`;
         const testBadge = b.is_test_data ? `<span class="badge badge-test">[TEST]</span>` : '';
 
         return `
-            <tr style="${isExam ? 'background:#fffbeb; font-weight:500;' : ''}">
-                <td>${b.date}</td>
+            <tr style="${isExam ? 'background:#fafafa;' : ''}">
+                <td style="font-weight:600;">${b.date}</td>
                 <td><strong>${b.start_time} - ${b.end_time}</strong></td>
                 <td>
                     <strong>${b.room_code}</strong> (${escapeHtml(b.room_name)})<br/>
-                    <span style="font-size:0.75rem; color:#64748b;">${b.building_id} - ${b.floor}</span>
+                    <span style="font-size:0.75rem; color:#6b7280;">${b.building_id} - ${b.floor}</span>
                 </td>
                 <td>
                     ${testBadge} <strong>${escapeHtml(b.title)}</strong><br/>
-                    <span style="font-size:0.75rem; color:#64748b;">Expected: ${b.expected_students} students</span>
+                    <span style="font-size:0.75rem; color:#6b7280;">Expected: ${b.expected_students} students</span>
                 </td>
                 <td>${examBadge}</td>
                 <td>${escapeHtml(b.booked_by_name)}</td>
@@ -554,28 +553,28 @@ function renderNotices(notices) {
     if (!feed) return;
 
     if (!notices || notices.length === 0) {
-        feed.innerHTML = `<div style="text-align:center; color:#64748b; padding:2rem;">No official announcements currently posted.</div>`;
+        feed.innerHTML = `<div style="text-align:center; color:#6b7280; padding:2rem;">No announcements currently posted.</div>`;
         return;
     }
 
     feed.innerHTML = notices.map(n => {
-        let pBadge = `<span class="badge" style="background:#f1f5f9; color:#475569;">${n.priority}</span>`;
+        let pBadge = `<span class="badge">${n.priority}</span>`;
         if (n.priority === "URGENT") pBadge = `<span class="badge badge-urgent">URGENT</span>`;
         else if (n.priority === "HIGH") pBadge = `<span class="badge badge-exam">HIGH PRIORITY</span>`;
 
         return `
-            <div class="card" style="margin-bottom:1rem; border-left: 4px solid ${n.priority === 'URGENT' ? '#ef4444' : '#3b82f6'};">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
-                    <div style="display:flex; align-items:center; gap:0.5rem;">
+            <div class="card" style="margin-bottom:0.75rem; border-left: 3px solid ${n.priority === 'URGENT' ? '#111827' : '#9ca3af'};">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+                    <div style="display:flex; align-items:center; gap:0.4rem;">
                         ${pBadge}
-                        <h4 style="font-size:1.05rem; color:#1e293b;">${escapeHtml(n.title)}</h4>
+                        <h4 style="font-size:0.95rem; font-weight:700; color:#111827;">${escapeHtml(n.title)}</h4>
                     </div>
-                    <span style="font-size:0.75rem; color:#64748b;">Target: ${n.target_branch} (Yr ${n.target_year || 'All'})</span>
+                    <span style="font-size:0.75rem; color:#6b7280;">Target: ${n.target_branch} (Yr ${n.target_year || 'All'})</span>
                 </div>
-                <p style="color:#334155; font-size:0.9rem; line-height:1.5;">${escapeHtml(n.content)}</p>
-                <div style="font-size:0.75rem; color:#64748b; margin-top:0.6rem; display:flex; justify-content:space-between;">
-                    <span>Published by: <strong>${escapeHtml(n.published_by_name || 'Academic Office')}</strong></span>
-                    <span>${new Date(n.created_at).toLocaleString('en-IN')}</span>
+                <p style="color:#4b5563; font-size:0.85rem; line-height:1.4;">${escapeHtml(n.content)}</p>
+                <div style="font-size:0.75rem; color:#6b7280; margin-top:0.5rem; display:flex; justify-content:space-between; border-top:1px solid #f3f4f6; padding-top:0.35rem;">
+                    <span>By: <strong>${escapeHtml(n.published_by_name || 'Academic Office')}</strong></span>
+                    <span>${new Date(n.created_at).toLocaleDateString('en-IN')}</span>
                 </div>
             </div>
         `;
@@ -603,15 +602,15 @@ async function handleNoticeSubmit(e) {
             body: JSON.stringify(payload)
         });
         if (res.ok) {
-            showToast("Notice published successfully!", "success");
+            showToast("Notice published successfully!");
             document.getElementById("notice-form").reset();
             loadNotices();
         } else {
             const err = await res.json();
-            showToast(err.detail || "Failed to publish notice", "error");
+            showToast(err.detail || "Failed to publish notice");
         }
     } catch (err) {
-        showToast("Error creating notice", "error");
+        showToast("Error creating notice");
     }
 }
 
@@ -633,34 +632,34 @@ function renderReports(reports) {
     if (!listEl) return;
 
     if (!reports || reports.length === 0) {
-        listEl.innerHTML = `<div style="text-align:center; color:#64748b; padding:1.5rem;">No conflict or grievance reports submitted.</div>`;
+        listEl.innerHTML = `<div style="text-align:center; color:#6b7280; padding:1.5rem;">No conflict or grievance reports submitted.</div>`;
         return;
     }
 
     listEl.innerHTML = reports.map(r => {
-        let statusBadge = `<span class="badge" style="background:#fef3c7; color:#92400e;">OPEN</span>`;
-        if (r.status === "RESOLVED") statusBadge = `<span class="badge" style="background:#dcfce7; color:#166534;">RESOLVED</span>`;
-        else if (r.status === "DISMISSED") statusBadge = `<span class="badge" style="background:#fee2e2; color:#991b1b;">DISMISSED</span>`;
+        let statusBadge = `<span class="badge">OPEN</span>`;
+        if (r.status === "RESOLVED") statusBadge = `<span class="badge badge-urgent">RESOLVED</span>`;
+        else if (r.status === "DISMISSED") statusBadge = `<span class="badge">DISMISSED</span>`;
 
         const canResolve = (currentUser.role === "admin" || currentUser.role === "faculty");
 
         return `
-            <div class="card" style="margin-bottom:1rem;">
+            <div class="card" style="margin-bottom:0.75rem;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                     <div>
-                        <h4 style="font-size:1rem; color:#1e293b;">${escapeHtml(r.title)}</h4>
-                        <div style="font-size:0.75rem; color:#64748b;">
-                            Filed by ${escapeHtml(r.student_name)} (${escapeHtml(r.student_email)}) &bull; Type: ${r.report_type}
+                        <h4 style="font-size:0.9rem; font-weight:700; color:#111827;">${escapeHtml(r.title)}</h4>
+                        <div style="font-size:0.75rem; color:#6b7280;">
+                            Filed by ${escapeHtml(r.student_name)} &bull; ${r.report_type}
                         </div>
                     </div>
                     ${statusBadge}
                 </div>
-                <p style="font-size:0.85rem; color:#334155; margin:0.5rem 0;">${escapeHtml(r.description)}</p>
-                ${r.admin_notes ? `<div style="background:#f1f5f9; padding:0.5rem; border-radius:4px; font-size:0.8rem; color:#0f172a;"><strong>Staff Response:</strong> ${escapeHtml(r.admin_notes)}</div>` : ''}
+                <p style="font-size:0.8rem; color:#4b5563; margin:0.4rem 0;">${escapeHtml(r.description)}</p>
+                ${r.admin_notes ? `<div style="background:#f9fafb; border:1px solid #e5e7eb; padding:0.4rem; border-radius:4px; font-size:0.75rem; color:#111827;"><strong>Staff Response:</strong> ${escapeHtml(r.admin_notes)}</div>` : ''}
 
                 ${canResolve && r.status === 'OPEN' ? `
-                    <div style="margin-top:0.75rem; display:flex; gap:0.5rem;">
-                        <button class="btn btn-sm btn-success" onclick="resolveReport(${r.id}, 'RESOLVED')">Mark Resolved</button>
+                    <div style="margin-top:0.5rem; display:flex; gap:0.4rem;">
+                        <button class="btn btn-sm btn-primary" onclick="resolveReport(${r.id}, 'RESOLVED')">Mark Resolved</button>
                         <button class="btn btn-sm btn-secondary" onclick="resolveReport(${r.id}, 'DISMISSED')">Dismiss</button>
                     </div>
                 ` : ''}
@@ -687,20 +686,20 @@ async function handleStudentReportSubmit(e) {
             body: JSON.stringify(payload)
         });
         if (res.ok) {
-            showToast("Report submitted! Academic coordinators will review it.", "success");
+            showToast("Report submitted for review.");
             document.getElementById("report-form").reset();
             loadReports();
         } else {
             const err = await res.json();
-            showToast(err.detail || "Failed to submit report", "error");
+            showToast(err.detail || "Failed to submit report");
         }
     } catch (err) {
-        showToast("Network error submitting report", "error");
+        showToast("Network error submitting report");
     }
 }
 
 async function resolveReport(reportId, status) {
-    const notes = prompt("Enter resolution notes / remarks:", "Schedule verified and updated.");
+    const notes = prompt("Enter resolution notes:", "Schedule verified and updated.");
     if (notes === null) return;
 
     try {
@@ -713,11 +712,11 @@ async function resolveReport(reportId, status) {
             body: JSON.stringify({ status, admin_notes: notes })
         });
         if (res.ok) {
-            showToast(`Report updated to ${status}`, "success");
+            showToast(`Report updated to ${status}`);
             loadReports();
         }
     } catch (err) {
-        showToast("Error updating report", "error");
+        showToast("Error updating report");
     }
 }
 
@@ -728,7 +727,7 @@ async function askAI(quickQuery = null) {
     if (!query) return;
 
     const resultBox = document.getElementById("ai-response-box");
-    resultBox.innerHTML = `<div style="padding:1.5rem; text-align:center; color:#3b82f6;">🤖 Analyzing campus infrastructure constraints & schedule records...</div>`;
+    resultBox.innerHTML = `<div style="padding:1.5rem; text-align:center; color:#111827;">Analyzing campus constraints & schedule records...</div>`;
 
     try {
         const res = await fetch(`${API_BASE}/ai/assist`, {
@@ -739,7 +738,7 @@ async function askAI(quickQuery = null) {
         const data = await res.json();
         renderAIResponse(data);
     } catch (err) {
-        resultBox.innerHTML = `<div style="color:#ef4444; padding:1rem;">Failed to get AI assistance.</div>`;
+        resultBox.innerHTML = `<div style="color:#b91c1c; padding:1rem;">Failed to get AI assistance.</div>`;
     }
 }
 
@@ -748,17 +747,17 @@ function renderAIResponse(data) {
     if (!resultBox) return;
 
     let html = `
-        <div style="background:white; border:1px solid #bfdbfe; border-radius:8px; padding:1.25rem;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
-                <h4 style="color:#1e3a8a; font-size:1.1rem;">🧠 AI Smart Allocation Analysis</h4>
-                <span class="badge" style="background:#dbeafe; color:#1e40af;">Algorithmic Optimization</span>
+        <div style="background:#ffffff; border:1px solid #d1d5db; border-radius:6px; padding:1rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; border-bottom:1px solid #e5e7eb; padding-bottom:0.5rem;">
+                <h4 style="color:#111827; font-size:0.95rem; font-weight:700;">AI Optimization Results</h4>
+                <span class="badge">Rule-Based Solver</span>
             </div>
-            <div style="background:#f8fafc; padding:0.75rem; border-radius:6px; font-size:0.85rem; color:#475569; margin-bottom:1rem;">
-                <strong>Extracted Intent:</strong> ${escapeHtml(data.parsed_intent)}<br/>
-                <strong>Target Date:</strong> ${data.extracted_params.date} &bull; <strong>Time:</strong> ${data.extracted_params.start_time} &bull; <strong>Capacity:</strong> ${data.extracted_params.capacity}
+            <div style="background:#f9fafb; border:1px solid #e5e7eb; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.8rem; color:#4b5563; margin-bottom:0.75rem;">
+                <strong>Intent:</strong> ${escapeHtml(data.parsed_intent)}<br/>
+                <strong>Parameters:</strong> Date: ${data.extracted_params.date} &bull; Time: ${data.extracted_params.start_time} &bull; Capacity: ${data.extracted_params.capacity} seats
             </div>
-            <h5 style="margin-bottom:0.5rem; color:#0f172a;">Recommended Classrooms:</h5>
-            <div style="display:flex; flex-direction:column; gap:0.5rem;">
+            <div style="font-size:0.8rem; font-weight:700; color:#111827; margin-bottom:0.4rem;">Optimal Venues:</div>
+            <div style="display:flex; flex-direction:column; gap:0.4rem;">
     `;
 
     if (data.recommended_rooms && data.recommended_rooms.length > 0) {
@@ -768,12 +767,12 @@ function renderAIResponse(data) {
                 <div class="alt-item">
                     <div>
                         <strong>${alt.code} - ${escapeHtml(alt.name)}</strong>
-                        <span class="badge" style="background:${isDB ? '#e0e7ff' : '#d1fae5'}; color:${isDB ? '#3730a3' : '#065f46'};">
+                        <span class="badge" style="margin-left:0.35rem;">
                             ${isDB ? 'Deeksha Bhawan (~100m)' : 'IET Main'}
                         </span>
-                        <div style="font-size:0.8rem; color:#475569;">${escapeHtml(alt.reason)}</div>
+                        <div style="font-size:0.75rem; color:#6b7280; margin-top:0.15rem;">${escapeHtml(alt.reason)}</div>
                     </div>
-                    <div style="display:flex; align-items:center; gap:0.75rem;">
+                    <div style="display:flex; align-items:center; gap:0.5rem;">
                         <span class="alt-score">Match: ${alt.fit_score}%</span>
                         <button class="btn btn-sm btn-primary" onclick="prefillBooking('${alt.room_id}', '${data.extracted_params.capacity}')">
                             Select Room
@@ -783,7 +782,7 @@ function renderAIResponse(data) {
             `;
         });
     } else {
-        html += `<div style="color:#64748b;">No matching rooms free at this exact slot. Try adjacent time slots: ${data.available_time_slots.slice(0, 3).join(", ")}</div>`;
+        html += `<div style="color:#6b7280; font-size:0.8rem;">No rooms vacant at this exact slot. Alternative times: ${data.available_time_slots.slice(0, 3).join(", ")}</div>`;
     }
 
     html += `</div></div>`;
@@ -808,15 +807,15 @@ function renderAudit(logs) {
     if (!list) return;
 
     if (!logs || logs.length === 0) {
-        list.innerHTML = `<div style="text-align:center; color:#64748b; padding:1.5rem;">No audit logs recorded yet.</div>`;
+        list.innerHTML = `<div style="text-align:center; color:#6b7280; padding:1.5rem;">No audit logs recorded yet.</div>`;
         return;
     }
 
     list.innerHTML = logs.map(l => `
         <div class="timeline-item">
-            <div class="meta">${new Date(l.timestamp).toLocaleString('en-IN')} &bull; User: <strong>${escapeHtml(l.user_name || 'System')}</strong> (${l.user_role || 'system'})</div>
-            <div class="title" style="color:#1e3a8a;">[${l.action}] ${escapeHtml(l.entity_type)} #${l.entity_id}</div>
-            <div style="font-size:0.85rem; color:#334155; margin-top:0.2rem;">${escapeHtml(l.details)}</div>
+            <div class="meta">${new Date(l.timestamp).toLocaleDateString('en-IN')} ${new Date(l.timestamp).toLocaleTimeString('en-IN')} &bull; User: <strong>${escapeHtml(l.user_name || 'System')}</strong> (${l.user_role || 'system'})</div>
+            <div class="title">[${l.action}] ${escapeHtml(l.entity_type)} #${l.entity_id}</div>
+            <div style="font-size:0.8rem; color:#4b5563; margin-top:0.15rem;">${escapeHtml(l.details)}</div>
         </div>
     `).join("");
 }
@@ -832,26 +831,26 @@ function escapeHtml(str) {
         .replace(/'/g, "&#039;");
 }
 
-function showToast(message, type = "info") {
+function showToast(message) {
     const toast = document.createElement("div");
     toast.style.position = "fixed";
     toast.style.bottom = "20px";
     toast.style.right = "20px";
-    toast.style.background = type === "success" ? "#10b981" : (type === "error" ? "#ef4444" : "#3b82f6");
-    toast.style.color = "white";
-    toast.style.padding = "0.75rem 1.25rem";
-    toast.style.borderRadius = "8px";
-    toast.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
+    toast.style.background = "#111827";
+    toast.style.color = "#ffffff";
+    toast.style.padding = "0.6rem 1rem";
+    toast.style.borderRadius = "4px";
+    toast.style.border = "1px solid #374151";
+    toast.style.boxShadow = "0 4px 12px rgba(0,0,0,0.12)";
     toast.style.zIndex = "9999";
-    toast.style.fontSize = "0.9rem";
+    toast.style.fontSize = "0.85rem";
     toast.style.fontWeight = "500";
     toast.textContent = message;
 
     document.body.appendChild(toast);
     setTimeout(() => {
         toast.style.opacity = "0";
-        toast.style.transition = "opacity 0.3s ease";
-        setTimeout(() => toast.remove(), 300);
-    }, 3200);
+        toast.style.transition = "opacity 0.25s ease";
+        setTimeout(() => toast.remove(), 250);
+    }, 2800);
 }
-
